@@ -1,0 +1,175 @@
+<%- include('partials/header', {title}) %>
+
+<!-- 견적 문의 히어로 섹션 -->
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-content">
+      <h1>세탁 견적 문의</h1>
+      <p>고객 맞춤 견적 서비스로 정확하고 합리적인 가격을 제공해드립니다</p>
+    </div>
+  </div>
+</section>
+
+<!-- 견적 문의 폼 -->
+<section class="section">
+  <div class="container">
+    <div class="estimate-container">
+      <div class="estimate-form-container">
+        <h2>견적 문의하기</h2>
+        <p class="form-description">세탁 서비스 견적을 받기 위해 아래 정보를 입력해주세요. 빠른 시일 내에 연락드리겠습니다.</p>
+        
+        <form class="estimate-form" id="estimateForm">
+          <div class="form-group">
+            <label for="companyName">업체명/성함 *</label>
+            <input type="text" id="companyName" name="companyName" required placeholder="업체명 또는 성함을 입력해주세요">
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contactName">담당자명 *</label>
+              <input type="text" id="contactName" name="contactName" required placeholder="담당자명을 입력해주세요">
+            </div>
+            <div class="form-group">
+              <label for="phone">연락처 *</label>
+              <input type="tel" id="phone" name="phone" required placeholder="010-1234-5678">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">이메일</label>
+            <input type="email" id="email" name="email" placeholder="example@email.com">
+          </div>
+          
+          <div class="form-group">
+            <label for="serviceType">서비스 유형 *</label>
+            <select id="serviceType" name="serviceType" required>
+              <option value="">서비스 유형을 선택해주세요</option>
+              <option value="health">헬스·스포츠센터 세탁</option>
+              <option value="sauna">대형사우나·찜질방 세탁</option>
+              <option value="corporate">기업체 연수원 세탁</option>
+              <option value="school">학교·학원 세탁</option>
+              <option value="other">기타</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="laundryType">세탁물 종류 *</label>
+            <select id="laundryType" name="laundryType" required>
+              <option value="">세탁물 종류를 선택해주세요</option>
+              <option value="workout">운동복</option>
+              <option value="towel">수건</option>
+              <option value="sauna">사우나복</option>
+              <option value="uniform">제복</option>
+              <option value="bedding">침구류</option>
+              <option value="mixed">혼합</option>
+            </select>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="quantity">세탁물 수량 (kg) *</label>
+              <input type="number" id="quantity" name="quantity" required placeholder="예: 50" min="1">
+            </div>
+            <div class="form-group">
+              <label for="frequency">세탁 빈도 *</label>
+              <select id="frequency" name="frequency" required>
+                <option value="">세탁 빈도를 선택해주세요</option>
+                <option value="daily">매일</option>
+                <option value="weekly">주 1-2회</option>
+                <option value="biweekly">2주 1회</option>
+                <option value="monthly">월 1회</option>
+                <option value="one-time">1회성</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="location">수거/배송 지역 *</label>
+            <input type="text" id="location" name="location" required placeholder="예: 경기도 파주시">
+          </div>
+          
+          <div class="form-group">
+            <label for="specialRequirements">특별 요구사항</label>
+            <textarea id="specialRequirements" name="specialRequirements" rows="4" placeholder="특별한 요구사항이나 문의사항이 있으시면 입력해주세요"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="message">기타 문의사항</label>
+            <textarea id="message" name="message" rows="3" placeholder="기타 문의사항을 입력해주세요"></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-large">견적 문의하기</button>
+          <p class="form-note">* 필수 입력 항목입니다. 견적 문의 후 24시간 이내에 연락드리겠습니다.</p>
+        </form>
+      </div>
+      
+      <div class="estimate-info">
+        <h3>견적 문의 안내</h3>
+        <div class="info-card">
+          <div class="info-item">
+            <div class="info-icon">📞</div>
+            <div class="info-content">
+              <h4>전화 문의</h4>
+              <p>010-7136-6165</p>
+              <p>평일 9:00 – 22:00</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">⚡</div>
+            <div class="info-content">
+              <h4>빠른 견적</h4>
+              <p>24시간 이내</p>
+              <p>상담 및 견적 제공</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">💰</div>
+            <div class="info-content">
+              <h4>합리적 가격</h4>
+              <p>투명한 가격 정책</p>
+              <p>맞춤형 견적</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="pricing-guide">
+          <h4>견적 기준 안내</h4>
+          <ul>
+            <li>세탁물 종류 및 수량</li>
+            <li>세탁 빈도</li>
+            <li>수거/배송 거리</li>
+            <li>특수 처리 요구사항</li>
+            <li>서비스 기간</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ 섹션 -->
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="text-center">자주 묻는 질문</h2>
+    <div class="faq-container">
+      <div class="faq-item">
+        <h3>견적은 언제 받을 수 있나요?</h3>
+        <p>견적 문의 접수 후 24시간 이내에 연락드려 상세 견적을 제공해드립니다.</p>
+      </div>
+      <div class="faq-item">
+        <h3>최소 수량이 있나요?</h3>
+        <p>특별한 최소 수량 제한은 없으며, 소량도 견적해드립니다.</p>
+      </div>
+      <div class="faq-item">
+        <h3>수거/배송 서비스가 있나요?</h3>
+        <p>네, 고객의 편의를 위해 수거 및 배송 서비스를 제공합니다.</p>
+      </div>
+      <div class="faq-item">
+        <h3>특수 크리닝이 가능한가요?</h3>
+        <p>헬스, 사우나, 찜질방 등 다양한 특수 크리닝 서비스를 제공합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
