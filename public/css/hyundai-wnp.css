@@ -1079,6 +1079,69 @@ h2::after {
   margin-bottom: 1.5rem;
 }
 
+/* 강조 스타일 */
+.operation-item.highlight,
+.contact-card.highlight {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  transform: scale(1.05);
+  box-shadow: 0 20px 25px -5px rgba(102, 126, 234, 0.3);
+}
+
+.operation-item.highlight h3,
+.contact-card.highlight h3 {
+  color: white;
+}
+
+.operation-item.highlight p,
+.contact-card.highlight .contact-hours {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.operation-item.highlight strong,
+.contact-card.highlight strong {
+  color: white;
+  font-size: 1.2em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.highlight-text {
+  color: #667eea;
+  font-weight: 700;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Footer 강조 스타일 */
+.footer-contact .contact-item.highlight {
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  margin: 0.25rem 0;
+}
+
+.footer-contact .contact-item.highlight span {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.footer-contact .contact-item.highlight strong {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.footer-hours p:first-child strong {
+  color: #667eea;
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
 /* ===== 반응형 스타일 ===== */
 
 /* 태블릿 */
@@ -1194,6 +1257,12 @@ h2::after {
   .contact-number,
   .contact-email {
     font-size: 1.25rem;
+  }
+  
+  .operation-item.highlight,
+  .contact-card.highlight {
+    transform: none;
+    margin-bottom: 1.5rem;
   }
 }
 
