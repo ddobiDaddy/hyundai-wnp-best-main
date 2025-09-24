@@ -1,0 +1,8 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="32" height="32" rx="4" fill="#0066cc"/>
+<path d="M8 10H16V16H8V10Z" fill="white"/>
+<path d="M18 10H26V16H18V10Z" fill="white"/>
+<path d="M8 19H16V25H8V19Z" fill="white"/>
+<path d="M18 19H26V25H18V19Z" fill="white"/>
+<text x="16" y="28" font-family="Arial, sans-serif" font-size="6" fill="white" text-anchor="middle">W</text>
+</svg>

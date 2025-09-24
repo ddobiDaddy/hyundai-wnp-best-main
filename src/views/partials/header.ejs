@@ -2,12 +2,39 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0066cc" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="format-detection" content="telephone=no" />
+  
   <title><%= title %></title>
-  <meta name="description" content="현대WNP - 대한민국 NO.1 세탁전문기업" />
+  <meta name="description" content="현대WNP - 대한민국 NO.1 세탁전문기업. 전문 세탁 서비스와 창업 기회를 제공합니다." />
+  <meta name="keywords" content="현대WNP, 세탁, 창업, 전문세탁, 헬스세탁, 사우나세탁" />
+  <meta name="author" content="현대W&P" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="<%= title %>" />
+  <meta property="og:description" content="현대WNP - 대한민국 NO.1 세탁전문기업" />
+  <meta property="og:url" content="<%= typeof baseUrl !== 'undefined' ? baseUrl : '' %>" />
+  <meta property="og:site_name" content="현대W&P" />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:title" content="<%= title %>" />
+  <meta property="twitter:description" content="현대WNP - 대한민국 NO.1 세탁전문기업" />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg" />
+  
+  <!-- Performance optimizations -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap">
+  
   <link rel="stylesheet" href="/css/hyundai-wnp.css" />
   <script defer src="/js/hyundai-wnp.js"></script>
 </head>
