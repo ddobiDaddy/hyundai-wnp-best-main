@@ -355,7 +355,7 @@ body {
 
 /* 섹션 공통 */
 .section {
-  padding: 80px 0;
+  padding: 40px 0;
   position: relative;
 }
 
@@ -378,26 +378,25 @@ body {
 h2 {
   font-size: 2.5rem;
   font-weight: 600;
-  margin-bottom: 3rem;
+  margin-bottom: 0.75rem;
   color: #1e293b;
   position: relative;
 }
 
 h2::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 4px;
-  background: linear-gradient(45deg, #667eea, #764ba2);
-  border-radius: 2px;
+  display: none;
 }
 
 .text-center h2::after {
-  left: 50%;
-  transform: translateX(-50%);
+  display: none;
+}
+
+.text-center h2 {
+  margin-bottom: 0.75rem !important;
+}
+
+h2.text-center {
+  margin-bottom: 0.75rem !important;
 }
 
 /* 그리드 레이아웃 */
@@ -785,6 +784,47 @@ h2::after {
   font-size: 1.1rem;
   font-weight: 600;
   margin-top: 1rem;
+}
+
+.btn-extra-large {
+  padding: 2rem 4rem;
+  font-size: 2.7rem;
+  font-weight: 800;
+  margin-top: 1rem;
+  min-width: 400px;
+  text-align: center;
+  display: inline-block;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 102, 204, 0.3);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  border: none;
+}
+
+.btn-extra-large::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-extra-large:hover::before {
+  left: 100%;
+}
+
+.btn-extra-large:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0, 102, 204, 0.4);
+  background: #0052a3;
+  text-decoration: none;
 }
 
 .form-note {
@@ -1564,7 +1604,7 @@ h2::after {
 
 /* ===== 섹션 스타일 ===== */
 section {
-  padding: 80px 0;
+  padding: 40px 0;
 }
 
 h2 {
@@ -1585,6 +1625,7 @@ h3 {
 /* ===== 서비스 메뉴 스타일 ===== */
 .service-menu {
   background: var(--bg-light);
+  padding: 40px 0;
 }
 
 .service-grid {
@@ -1621,6 +1662,315 @@ h3 {
   padding: 0 20px 20px;
   color: var(--text-light);
   line-height: 1.5;
+}
+
+/* ===== 견적 문의 섹션 스타일 ===== */
+.estimate-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  padding: 40px 0;
+}
+
+.estimate-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.estimate-card {
+  background: white;
+  padding: 30px 20px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.estimate-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border-color: #667eea;
+}
+
+.estimate-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.estimate-card h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1e293b;
+}
+
+.estimate-card p {
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.estimate-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.estimate-actions {
+  text-align: center;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.estimate-actions .btn {
+  padding: 15px 30px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ===== 섹션 부제목 스타일 ===== */
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+/* ===== 서비스 특징 하이라이트 ===== */
+.feature-highlight {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+/* ===== 프로세스 스텝 아이콘 ===== */
+.step-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+/* ===== 특수 서비스 배지 ===== */
+.service-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+/* ===== About 페이지 스타일 ===== */
+.about-intro {
+  margin-bottom: 3rem;
+}
+
+.about-intro .lead {
+  font-size: 1.3rem;
+  color: #64748b;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.about-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.about-features .feature-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.about-features .feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border-color: #667eea;
+}
+
+.about-features .feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.about-features .feature-card h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1e293b;
+}
+
+.about-features .feature-card p {
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.vision-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.vision-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.vision-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border-color: #667eea;
+}
+
+.vision-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.vision-card h3 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1e293b;
+}
+
+.vision-card p {
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+/* ===== 간단한 프로세스 스타일 ===== */
+.simple-process {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.process-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.process-step:hover {
+  transform: translateY(-5px);
+}
+
+.process-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  color: white;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+.process-step:hover .process-icon {
+  transform: scale(1.1);
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+}
+
+.process-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-top: 0.5rem;
+}
+
+.process-arrow {
+  font-size: 2.5rem;
+  color: #667eea;
+  font-weight: bold;
+  margin: 0 1rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
 }
 
 
@@ -1776,17 +2126,26 @@ h3 {
   flex-direction: column;
 }
 
+.footer-brand {
+  max-width: 400px;
+}
+
 .footer-logo h3 {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: bold;
   color: var(--primary-color);
   margin-bottom: 8px;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .footer-logo p {
   color: #ccc;
   margin-bottom: 20px;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .footer-description {
@@ -1796,34 +2155,54 @@ h3 {
 .footer-description p {
   color: #bbb;
   line-height: 1.6;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .footer-contact {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 15px;
 }
 
 .contact-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: #ccc;
-  font-size: 14px;
+  font-size: 15px;
+  padding: 8px 0;
+  transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+  color: white;
+  transform: translateX(5px);
 }
 
 .contact-icon {
-  font-size: 16px;
-  width: 20px;
+  font-size: 18px;
+  width: 24px;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .footer-section h4 {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   color: white;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
+  position: relative;
+}
+
+.footer-section h4::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  border-radius: 1px;
 }
 
 .footer-links {
@@ -1833,45 +2212,63 @@ h3 {
 }
 
 .footer-links li {
-  margin-bottom: 12px;
+  margin-bottom: 15px;
 }
 
 .footer-links a {
   color: #ccc;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 15px;
   transition: all 0.3s ease;
   display: block;
-  padding: 4px 0;
+  padding: 6px 0;
+  position: relative;
 }
 
 .footer-links a:hover {
   color: var(--primary-color);
-  transform: translateX(5px);
+  transform: translateX(8px);
+}
+
+.footer-links a::before {
+  content: '';
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 2px;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  transition: width 0.3s ease;
+}
+
+.footer-links a:hover::before {
+  width: 10px;
 }
 
 .footer-hours {
-  margin-top: 25px;
-  padding-top: 20px;
+  margin-top: 30px;
+  padding-top: 25px;
   border-top: 1px solid #444;
 }
 
 .footer-hours h5 {
   color: var(--primary-color);
-  margin-bottom: 12px;
-  font-size: 16px;
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .footer-hours p {
   color: #ccc;
-  font-size: 13px;
-  margin-bottom: 6px;
-  line-height: 1.4;
+  font-size: 14px;
+  margin-bottom: 8px;
+  line-height: 1.5;
 }
 
 .footer-bottom {
   background: #0f0f0f;
-  padding: 20px 0;
+  padding: 25px 0;
   border-top: 1px solid #444;
 }
 
@@ -1883,25 +2280,27 @@ h3 {
 
 .footer-copyright p {
   color: #999;
-  font-size: 13px;
+  font-size: 14px;
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .footer-links-bottom {
   display: flex;
-  gap: 20px;
+  gap: 25px;
 }
 
 .footer-link {
   color: #999;
   text-decoration: none;
-  font-size: 13px;
-  transition: color 0.3s ease;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  padding: 5px 0;
 }
 
 .footer-link:hover {
   color: var(--primary-color);
+  transform: translateY(-2px);
 }
 
 /* ===== 반응형 디자인 ===== */
@@ -2018,6 +2417,75 @@ h3 {
     grid-template-columns: 1fr;
   }
 
+  .estimate-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .estimate-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .estimate-actions .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .btn-extra-large {
+    padding: 1.5rem 2.5rem;
+    font-size: 2.1rem;
+    min-width: 280px;
+  }
+
+  .simple-process {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .process-arrow {
+    transform: rotate(90deg);
+    font-size: 2rem;
+    margin: 0.5rem 0;
+  }
+
+  .process-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 2.5rem;
+  }
+
+  .process-text {
+    font-size: 1rem;
+  }
+
+  .about-features {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .vision-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .about-features .feature-card,
+  .vision-card {
+    padding: 1.5rem;
+  }
+
+  .about-features .feature-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 2.5rem;
+  }
+
+  .vision-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 3rem;
+  }
+
   .company-content,
   .business-content {
     grid-template-columns: 1fr;
@@ -2034,6 +2502,29 @@ h3 {
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 30px;
+  }
+
+  .footer-brand {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .footer-section h4 {
+    text-align: center;
+  }
+
+  .footer-section h4::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .footer-links a::before {
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+
+  .footer-links a:hover::before {
+    width: 20px;
   }
 
   .footer-bottom-content {
