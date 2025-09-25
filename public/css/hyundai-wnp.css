@@ -399,100 +399,9 @@ h2.text-center {
   margin-bottom: 0.75rem !important;
 }
 
-/* 그리드 레이아웃 */
-.content-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-}
 
-.content-text {
-  padding-right: 2rem;
-}
-
-.content-text .lead {
-  font-size: 1.25rem;
-  color: #64748b;
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
-}
-
-.content-image {
-  position: relative;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-.content-image img {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.content-image:hover img {
-  transform: scale(1.05);
-}
-
-/* 피처 리스트 */
-.features-list {
-  margin-top: 2rem;
-}
-
-.feature-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.feature-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-}
-
-.feature-icon {
-  font-size: 2.5rem;
-  flex-shrink: 0;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-radius: 12px;
-  color: white;
-}
-
-.feature-content h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #1e293b;
-}
-
-.feature-content p {
-  color: #64748b;
-  line-height: 1.6;
-  margin: 0;
-}
-
-/* 서비스 피처 카드 */
-.service-features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
-}
-
-.feature-card {
+/* ===== 공통 카드 스타일 ===== */
+.card {
   background: white;
   padding: 2rem;
   border-radius: 20px;
@@ -502,13 +411,13 @@ h2.text-center {
   border: 1px solid #e2e8f0;
 }
 
-.feature-card:hover {
+.card:hover {
   transform: translateY(-10px);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   border-color: #667eea;
 }
 
-.feature-card .feature-icon {
+.card-icon {
   font-size: 3rem;
   margin-bottom: 1.5rem;
   width: 80px;
@@ -522,67 +431,24 @@ h2.text-center {
   color: white;
 }
 
-.feature-card h3 {
+.card h3 {
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 1rem;
   color: #1e293b;
 }
 
-.feature-card p {
+.card p {
   color: #64748b;
   line-height: 1.6;
   margin: 0;
 }
 
-/* 연락처 정보 */
-.contact-info {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-}
-
-.contact-grid {
+/* 서비스 피처 카드 */
+.service-features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
-}
-
-.contact-item {
-  text-align: center;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
-}
-
-.contact-item:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.contact-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.contact-item h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: white;
-}
-
-.contact-item p {
-  font-size: 1.1rem;
-  opacity: 0.9;
-  line-height: 1.6;
-  margin: 0;
-}
-
-/* 갤러리 스타일 */
-.facility-gallery {
   margin-top: 3rem;
 }
 
@@ -644,6 +510,7 @@ h2.text-center {
   opacity: 0.9;
   margin: 0;
 }
+
 
 /* 시설 특징 */
 .facility-features {
@@ -1065,30 +932,11 @@ h2.text-center {
 }
 
 .contact-card {
-  background: white;
   padding: 2.5rem 2rem;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
-  transition: all 0.3s ease;
 }
 
-.contact-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-.contact-card .contact-icon {
+.contact-card .card-icon {
   font-size: 3.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.contact-card h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #1e293b;
 }
 
 .contact-number,
@@ -1190,15 +1038,6 @@ h2.text-center {
     font-size: 3rem;
   }
   
-  .content-grid {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-  
-  .content-text {
-    padding-right: 0;
-    text-align: center;
-  }
   
   .estimate-container,
   .inquiry-container {
@@ -1234,16 +1073,12 @@ h2.text-center {
     font-size: 2rem;
   }
   
-  .feature-item {
-    flex-direction: column;
-    text-align: center;
-    gap: 1rem;
-  }
   
   .service-features,
   .facility-features {
     grid-template-columns: 1fr;
   }
+
   
   .contact-grid,
   .gallery-grid,
@@ -1261,11 +1096,7 @@ h2.text-center {
     padding: 2rem;
   }
   
-  .contact-card {
-    padding: 2rem 1.5rem;
-  }
-  
-  .feature-card {
+  .card {
     padding: 1.5rem;
   }
 }
@@ -1289,8 +1120,7 @@ h2.text-center {
     padding: 1.5rem;
   }
   
-  .feature-card,
-  .contact-card {
+  .card {
     padding: 1.5rem 1rem;
   }
   
@@ -1607,22 +1437,31 @@ section {
   padding: 40px 0;
 }
 
-h2 {
-  font-size: 36px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 60px;
-  color: var(--text-dark);
-}
-
-h3 {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: var(--text-dark);
-}
 
 /* ===== 서비스 메뉴 스타일 ===== */
+/* 견적 문의 CTA */
+.estimate-cta-content {
+  text-align: center;
+  padding: 0;
+}
+
+.estimate-cta-content h2 {
+  margin-bottom: 1rem;
+  color: #1e293b;
+}
+
+.estimate-cta-content p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: #64748b;
+}
+
+.cta-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
 .service-menu {
   background: var(--bg-light);
   padding: 40px 0;
@@ -1632,6 +1471,7 @@ h3 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
+  margin-top: 2rem;
 }
 
 .service-item {
@@ -1678,45 +1518,14 @@ h3 {
 }
 
 .estimate-card {
-  background: white;
   padding: 30px 20px;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  border: 1px solid #e2e8f0;
 }
 
-.estimate-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  border-color: #667eea;
-}
-
-.estimate-icon {
+.estimate-card .card-icon {
   font-size: 3rem;
-  margin-bottom: 1.5rem;
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-}
-
-.estimate-card h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #1e293b;
 }
 
 .estimate-card p {
-  color: #64748b;
-  line-height: 1.6;
   margin-bottom: 1rem;
 }
 
@@ -1811,48 +1620,7 @@ h3 {
   margin-top: 2rem;
 }
 
-.about-features .feature-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  border: 1px solid #e2e8f0;
-}
 
-.about-features .feature-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  border-color: #667eea;
-}
-
-.about-features .feature-icon {
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-}
-
-.about-features .feature-card h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #1e293b;
-}
-
-.about-features .feature-card p {
-  color: #64748b;
-  line-height: 1.6;
-  margin: 0;
-}
 
 .vision-grid {
   display: grid;
@@ -1862,46 +1630,21 @@ h3 {
 }
 
 .vision-card {
-  background: white;
   padding: 2.5rem;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  border: 1px solid #e2e8f0;
 }
 
-.vision-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  border-color: #667eea;
-}
-
-.vision-icon {
+.vision-card .card-icon {
   font-size: 3.5rem;
-  margin-bottom: 1.5rem;
   width: 90px;
   height: 90px;
-  margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
   border-radius: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
 }
 
 .vision-card h3 {
   font-size: 1.6rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #1e293b;
 }
 
 .vision-card p {
-  color: #64748b;
-  line-height: 1.6;
-  margin: 0;
   font-size: 1.1rem;
 }
 
@@ -2408,10 +2151,6 @@ h3 {
     right: 15px;
   }
 
-  h2 {
-    font-size: 28px;
-    margin-bottom: 40px;
-  }
 
   .service-grid {
     grid-template-columns: 1fr;
@@ -2469,22 +2208,8 @@ h3 {
     gap: 1.5rem;
   }
 
-  .about-features .feature-card,
-  .vision-card {
-    padding: 1.5rem;
-  }
 
-  .about-features .feature-icon {
-    width: 60px;
-    height: 60px;
-    font-size: 2.5rem;
-  }
 
-  .vision-icon {
-    width: 70px;
-    height: 70px;
-    font-size: 3rem;
-  }
 
   .company-content,
   .business-content {
