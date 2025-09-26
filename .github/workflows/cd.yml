@@ -16,4 +16,10 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           port: 2222
           script: |
-            bash -lc "/opt/hyundai-wnp/deploy.sh | tee -a /opt/hyundai-wnp/deploy.log"
+            bash -lc "
+            echo '[CD] Stopping existing containers...'
+            docker stop hyundai-wnp || true
+            docker rm hyundai-wnp || true
+            echo '[CD] Running deploy script...'
+            /opt/hyundai-wnp/deploy.sh | tee -a /opt/hyundai-wnp/deploy.log
+            "
