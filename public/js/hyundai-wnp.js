@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initMobileMenu();
     initScrollAnimations();
     initSmoothScroll();
-        initBannerButtons();
+        // initBannerButtons(); // 배너 버튼은 순수 HTML 링크로 동작
         
         
         console.log('현대W&P 웹사이트 초기화 완료');
@@ -204,6 +204,10 @@ function initBannerSlider() {
         let pointerDown = false;
 
         viewport.addEventListener('pointerdown', (e) => {
+            // 버튼이나 링크 클릭인 경우 슬라이더 이벤트 무시
+            if (e.target.closest('a, button')) {
+                return;
+            }
             pointerDown = true;
             startX = e.clientX;
             track.style.transition = 'none';
@@ -394,13 +398,14 @@ function initBannerButtons() {
             btn.addEventListener('click', (e) => {
                 const href = btn.getAttribute('href');
                 
-                // 앵커 링크가 아닌 경우에만 처리
+                // 실제 링크인 경우 (앵커가 아닌 경우) - 기본 동작 허용
                 if (href && !href.startsWith('#')) {
-                    // 실제 링크로 이동
-                    return;
+                    // 실제 링크로 이동 - 기본 동작 허용
+                    console.log('실제 링크로 이동:', href);
+                    return; // 기본 동작 허용
                 }
                 
-                // 앵커 링크인 경우 스크롤 처리
+                // 앵커 링크인 경우에만 preventDefault 사용
                 if (href && href.startsWith('#')) {
                     e.preventDefault();
                     const targetId = href.substring(1);
