@@ -126,20 +126,48 @@ function getStatusCount(estimates, status) {
       </div>
     </div>
 
+    <!-- 페이지당 항목 수 및 정렬 -->
+    <div class="admin-options">
+      <div class="items-per-page">
+        <label for="itemsPerPage">페이지당 항목:</label>
+        <select id="itemsPerPage" class="items-select">
+          <option value="5" selected>5개</option>
+          <option value="10">10개</option>
+          <option value="20">20개</option>
+          <option value="50">50개</option>
+        </select>
+      </div>
+      <div class="sort-options">
+        <label for="sortBy">정렬:</label>
+        <select id="sortBy" class="sort-select">
+          <option value="id">ID</option>
+          <option value="companyName">업체명</option>
+          <option value="contactName">담당자</option>
+          <option value="serviceType">서비스</option>
+          <option value="status">상태</option>
+          <option value="createdAt" selected>등록일</option>
+        </select>
+        <select id="sortOrder" class="sort-order-select">
+          <option value="desc" selected>내림차순</option>
+          <option value="asc">오름차순</option>
+        </select>
+      </div>
+    </div>
+
     <!-- 견적 문의 테이블 -->
     <div class="admin-table-container">
       <table class="admin-table">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>업체명</th>
-            <th>담당자</th>
+            <th class="sortable" data-sort="id">ID <span class="sort-icon">↕</span></th>
+            <th class="sortable" data-sort="companyName">업체명 <span class="sort-icon">↕</span></th>
+            <th class="sortable" data-sort="contactName">담당자 <span class="sort-icon">↕</span></th>
             <th>연락처</th>
-            <th>서비스</th>
+            <th class="sortable" data-sort="serviceType">서비스 <span class="sort-icon">↕</span></th>
             <th>수량</th>
             <th>지역</th>
-            <th>상태</th>
-            <th>등록일</th>
+            <th class="sortable" data-sort="status">상태 <span class="sort-icon">↕</span></th>
+            <th class="sortable" data-sort="createdAt">등록일 <span class="sort-icon">↕</span></th>
             <th>관리</th>
           </tr>
         </thead>
@@ -172,6 +200,22 @@ function getStatusCount(estimates, status) {
           <% }); %>
         </tbody>
       </table>
+    </div>
+
+    <!-- 페이징 네비게이션 -->
+    <div class="pagination-container">
+      <div class="pagination-info">
+        <span id="paginationInfo">전체 0개 중 0-0개 표시</span>
+      </div>
+      <div class="pagination">
+        <button id="firstPage" class="pagination-btn" disabled>«</button>
+        <button id="prevPage" class="pagination-btn" disabled>‹</button>
+        <div id="pageNumbers" class="page-numbers">
+          <!-- 페이지 번호가 여기에 동적으로 생성됩니다 -->
+        </div>
+        <button id="nextPage" class="pagination-btn" disabled>›</button>
+        <button id="lastPage" class="pagination-btn" disabled>»</button>
+      </div>
     </div>
   </div>
 </section>

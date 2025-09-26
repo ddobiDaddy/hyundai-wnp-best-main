@@ -25,42 +25,42 @@
   <div class="container">
     <h2 class="text-center">세탁 시설 갤러리</h2>
     <div class="gallery-grid">
-      <div class="gallery-item">
+      <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop', '대형 세탁기', '업소용 대용량 세탁기')">
         <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
         <div class="gallery-overlay">
           <h3>대형 세탁기</h3>
           <p>업소용 대용량 세탁기</p>
         </div>
       </div>
-      <div class="gallery-item">
+      <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', '건조 시설', '대용량 건조기')">
         <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
         <div class="gallery-overlay">
           <h3>건조 시설</h3>
           <p>대용량 건조기</p>
         </div>
       </div>
-      <div class="gallery-item">
+      <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop', '정리 시설', '세탁물 정리 및 분류')">
         <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
         <div class="gallery-overlay">
           <h3>정리 시설</h3>
           <p>세탁물 정리 및 분류</p>
         </div>
       </div>
-      <div class="gallery-item">
+      <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', '포장 시설', '세탁물 포장 및 배송 준비')">
         <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
         <div class="gallery-overlay">
           <h3>포장 시설</h3>
           <p>세탁물 포장 및 배송 준비</p>
         </div>
       </div>
-      <div class="gallery-item">
+      <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop', '품질 관리', '세탁 품질 검사')">
         <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
         <div class="gallery-overlay">
           <h3>품질 관리</h3>
           <p>세탁 품질 검사</p>
         </div>
       </div>
-      <div class="gallery-item">
+      <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=800&h=600&fit=crop', '배송 준비', '배송 준비 및 관리')">
         <img src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
         <div class="gallery-overlay">
           <h3>배송 준비</h3>
@@ -94,4 +94,64 @@
     </div>
   </div>
 </section>
+
+<!-- 이미지 모달 -->
+<div id="imageModal" class="image-modal">
+  <div class="image-modal-content">
+    <span class="image-modal-close">&times;</span>
+    <img id="modalImage" src="" alt="" />
+    <div class="image-modal-info">
+      <h3 id="modalTitle"></h3>
+      <p id="modalDescription"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+// 이미지 모달 열기
+function openImageModal(imageSrc, title, description) {
+  const modal = document.getElementById('imageModal');
+  const modalImage = document.getElementById('modalImage');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDescription = document.getElementById('modalDescription');
+  
+  modalImage.src = imageSrc;
+  modalTitle.textContent = title;
+  modalDescription.textContent = description;
+  
+  modal.style.display = 'block';
+  document.body.style.overflow = 'hidden'; // 스크롤 방지
+}
+
+// 이미지 모달 닫기
+function closeImageModal() {
+  const modal = document.getElementById('imageModal');
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto'; // 스크롤 복원
+}
+
+// 모달 이벤트 리스너
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('imageModal');
+  const closeBtn = document.querySelector('.image-modal-close');
+  
+  // 닫기 버튼 클릭
+  closeBtn.addEventListener('click', closeImageModal);
+  
+  // 모달 배경 클릭 시 닫기
+  modal.addEventListener('click', function(event) {
+    if (event.target === modal) {
+      closeImageModal();
+    }
+  });
+  
+  // ESC 키로 닫기
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' && modal.style.display === 'block') {
+      closeImageModal();
+    }
+  });
+});
+</script>
+
 <%- include('partials/footer') %>
