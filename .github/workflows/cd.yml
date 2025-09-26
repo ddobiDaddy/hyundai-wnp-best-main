@@ -2,7 +2,7 @@ name: CD - Deploy to Server
 
 on:
   push:
-    branches: [ "main" ]  # main 푸시/머지 시 배포
+    branches: [ "main" ]
 
 jobs:
   deploy:
@@ -11,8 +11,8 @@ jobs:
       - name: SSH Deploy (run deploy.sh on server)
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.DEPLOY_HOST }}      # 예: 1.2.3.4
-          username: ${{ secrets.DEPLOY_USER }}  # 예: root
-          password: ${{ secrets.DEPLOY_PASSWORD }}  # 패스워드
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
           script: |
-            /opt/hyundai-wnp/deploy.sh
+            bash -lc "/opt/hyundai-wnp/deploy.sh | tee -a /opt/hyundai-wnp/deploy.log"
