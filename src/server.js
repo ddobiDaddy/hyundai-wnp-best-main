@@ -14,26 +14,27 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Security & performance - 최적화된 CSP 정책
-const cspConfig = process.env.NODE_ENV === 'production' ? {
+// Security & performance - HTTP 환경에 최적화된 설정
+const cspConfig = {
   contentSecurityPolicy: {
     useDefaults: true,
     directives: {
       "default-src": ["'self'"],
-      "img-src": ["'self'", "data:", "https://images.unsplash.com", "https:"],
+      "img-src": ["'self'", "data:", "https://images.unsplash.com", "http:", "https:"],
       "icon-src": ["'self'", "data:"],
       "script-src": ["'self'", "'unsafe-inline'"],
-      "style-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      "style-src-elem": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      "style-src": ["'self'", "'unsafe-inline'", "http://fonts.googleapis.com", "https://fonts.googleapis.com"],
+      "style-src-elem": ["'self'", "'unsafe-inline'", "http://fonts.googleapis.com", "https://fonts.googleapis.com"],
       "style-src-attr": ["'self'", "'unsafe-inline'"],
-      "font-src": ["'self'", "https://fonts.gstatic.com", "data:"],
+      "font-src": ["'self'", "http://fonts.gstatic.com", "https://fonts.gstatic.com", "data:"],
       "connect-src": ["'self'"],
-      "media-src": ["'self'", "https:"],
+      "media-src": ["'self'", "http:", "https:"],
       "object-src": ["'none'"],
       "base-uri": ["'self'"],
       "form-action": ["'self'"],
-      "frame-ancestors": ["'none'"],
-      "upgrade-insecure-requests": []
+      "frame-ancestors": ["'none'"]
+      // HTTPS 환경에서 사용할 때 아래 주석 해제
+      // "upgrade-insecure-requests": []
     }
   },
   crossOriginEmbedderPolicy: false,
@@ -42,35 +43,39 @@ const cspConfig = process.env.NODE_ENV === 'production' ? {
   dnsPrefetchControl: { allow: true },
   frameguard: { action: "deny" },
   hidePoweredBy: true,
-  hsts: {
-    maxAge: 31536000,
-    includeSubDomains: true,
-    preload: true
-  },
+  // HTTP 환경: HSTS 비활성화
+  hsts: false,
+  // HTTPS 환경에서 사용할 때 아래 주석 해제하고 위의 hsts: false 제거
+  // hsts: {
+  //   maxAge: 31536000,
+  //   includeSubDomains: true,
+  //   preload: true
+  // },
   ieNoOpen: true,
   noSniff: true,
   originAgentCluster: true,
   permittedCrossDomainPolicies: false,
   referrerPolicy: { policy: "strict-origin-when-cross-origin" },
   xssFilter: true
-} : {
-  contentSecurityPolicy: {
-    useDefaults: false,
-    directives: {
-      "default-src": ["'self'"],
-      "img-src": ["'self'", "data:", "https:"],
-      "script-src": ["'self'", "'unsafe-inline'"],
-      "style-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      "style-src-elem": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      "font-src": ["'self'", "https://fonts.gstatic.com", "data:"],
-      "connect-src": ["'self'"]
-    }
-  }
 };
 
 app.use(helmet(cspConfig));
 app.use(compression());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
+
+// HTTP 강제 미들웨어 (HTTPS 리다이렉트 방지)
+app.use((req, res, next) => {
+  // HTTPS로 리다이렉트하는 헤더들 제거
+  res.removeHeader('Strict-Transport-Security');
+  res.removeHeader('Content-Security-Policy');
+  
+  // HTTP 환경임을 명시
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  
+  next();
+});
 
 // Body parsers
 app.use(express.urlencoded({ extended: true }));
@@ -116,6 +121,24 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`✅ Server listening on http://localhost:${PORT}`);
+const HOST = process.env.HOST || '0.0.0.0';
+
+// HTTP 서버 시작
+app.listen(PORT, HOST, () => {
+  console.log(`✅ Server listening on http://${HOST}:${PORT}`);
+  console.log(`🌐 Access your site at: http://${HOST}:${PORT}`);
 });
+
+// HTTPS 서버 설정 (SSL 인증서 설정 후 주석 해제)
+// import https from 'https';
+// import fs from 'fs';
+// 
+// const httpsOptions = {
+//   key: fs.readFileSync(process.env.SSL_KEY_PATH || '/path/to/private-key.pem'),
+//   cert: fs.readFileSync(process.env.SSL_CERT_PATH || '/path/to/certificate.pem')
+// };
+// 
+// https.createServer(httpsOptions, app).listen(443, HOST, () => {
+//   console.log(`🔒 HTTPS Server listening on https://${HOST}:443`);
+//   console.log(`🌐 Secure access at: https://${HOST}:443`);
+// });

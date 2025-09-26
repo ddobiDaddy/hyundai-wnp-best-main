@@ -890,6 +890,7 @@ h2.text-center {
 .faq-container {
   max-width: 800px;
   margin: 0 auto;
+  margin-top: 25px;
 }
 
 .faq-item {
@@ -1959,13 +1960,9 @@ section {
 }
 
 .footer-links a {
-  color: #ccc;
-  text-decoration: none;
-  font-size: 15px;
-  transition: all 0.3s ease;
-  display: block;
-  padding: 6px 0;
-  position: relative;
+  text-decoration: none;  /* 밑줄 제거 */
+  color: inherit;         /* 부모 글자 색상 따라감 */
+  
 }
 
 .footer-links a:hover {
@@ -2383,6 +2380,98 @@ section {
     font-size: 13px;
   }
 
+  /* 클릭 가능한 카드 스타일 */
+  .card-clickable {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
 
+  .card-clickable:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    background-color: #f8f9ff;
+  }
 
+  .info-item-clickable {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .info-item-clickable:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+    background-color: #f8f9ff;
+  }
+
+  /* 전화번호 링크 스타일 초기화 */
+  a[href^="tel:"] {
+    all: unset;
+    cursor: pointer;
+    display: inline;
+  }
+
+  /* Footer 전화번호 링크 특별 스타일 */
+  .footer-phone-link {
+    color: white !important;
+    text-decoration: none !important;
+  }
+
+  .footer-phone-link:hover {
+    color: white !important;
+    text-decoration: none !important;
+  }
+
+  .footer-phone-link:visited {
+    color: white !important;
+    text-decoration: none !important;
+  }
+
+  .footer-phone-link:active {
+    color: white !important;
+    text-decoration: none !important;
+  }
+
+  /* 웹킷 기본 링크 스타일 완전 오버라이드 */
+  a:-webkit-any-link {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+
+  .footer-phone-link:-webkit-any-link {
+    color: white !important;
+    text-decoration: none !important;
+  }
+
+  /* 더 구체적인 선택자로 강제 오버라이드 */
+  .footer-contact .footer-phone-link:-webkit-any-link {
+    color: white !important;
+    text-decoration: none !important;
+  }
+
+  /* 모든 상태에서 강제 적용 */
+  .footer-phone-link,
+  .footer-phone-link:link,
+  .footer-phone-link:visited,
+  .footer-phone-link:hover,
+  .footer-phone-link:active,
+  .footer-phone-link:focus {
+    color: white !important;
+    text-decoration: none !important;
+  }
+
+}
+
+/* 최종 강제 오버라이드 - 파일 맨 끝에 배치 */
+.footer-contact .footer-phone-link {
+  color: white !important;
+  text-decoration: none !important;
+}
+
+.footer-contact .footer-phone-link:-webkit-any-link {
+  color: white !important;
+  text-decoration: none !important;
 }

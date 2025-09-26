@@ -10,10 +10,17 @@
     "dev": "nodemon --watch src --ext js,ejs,css --exec \"node src/server.js\"",
     "start": "NODE_ENV=production node src/server.js",
     "start:bg": "NODE_ENV=production nohup node src/server.js > app.log 2>&1 &",
+    "start:http": "NODE_ENV=production HOST=0.0.0.0 node src/server.js",
+    "start:http:bg": "NODE_ENV=production HOST=0.0.0.0 nohup node src/server.js > app.log 2>&1 &",
     "stop": "pkill -f 'node src/server.js'",
     "restart": "npm run stop && npm run start:bg",
+    "restart:http": "npm run stop && npm run start:http:bg",
     "status": "pgrep -f 'node src/server.js'",
-    "logs": "tail -f app.log"
+    "logs": "tail -f app.log",
+    "_https_scripts": "HTTPS 환경에서 사용할 스크립트들 (SSL 인증서 설정 후 주석 해제)",
+    "_start:https": "NODE_ENV=production SSL_CERT_PATH=/path/to/cert.pem SSL_KEY_PATH=/path/to/key.pem node src/server.js",
+    "_start:https:bg": "NODE_ENV=production SSL_CERT_PATH=/path/to/cert.pem SSL_KEY_PATH=/path/to/key.pem nohup node src/server.js > app.log 2>&1 &",
+    "_restart:https": "npm run stop && npm run start:https:bg"
   },
   "dependencies": {
     "compression": "^1.7.4",
