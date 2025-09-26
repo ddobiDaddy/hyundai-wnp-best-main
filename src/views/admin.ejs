@@ -1,0 +1,215 @@
+<%- include('partials/header', {title}) %>
+
+<%
+// 텍스트 변환 헬퍼 함수들
+function getServiceTypeText(value) {
+  const serviceTypes = {
+    'health': '헬스·스포츠센터',
+    'sauna': '대형사우나·찜질방',
+    'corporate': '기업체 연수원',
+    'school': '학교·학원',
+    'other': '기타'
+  };
+  return serviceTypes[value] || value;
+}
+
+function getStatusText(value) {
+  const statuses = {
+    'pending': '대기중',
+    'processing': '처리중',
+    'completed': '완료',
+    'cancelled': '취소'
+  };
+  return statuses[value] || value;
+}
+
+function getLaundryTypeText(value) {
+  const laundryTypes = {
+    'workout': '운동복',
+    'towel': '수건',
+    'sauna': '사우나복',
+    'uniform': '제복',
+    'bedding': '침구류',
+    'mixed': '혼합'
+  };
+  return laundryTypes[value] || value;
+}
+
+function getFrequencyText(value) {
+  const frequencies = {
+    'daily': '매일',
+    'weekly': '주 1-2회',
+    'biweekly': '2주 1회',
+    'monthly': '월 1회',
+    'one-time': '1회성'
+  };
+  return frequencies[value] || value;
+}
+
+function getStatusCount(estimates, status) {
+  return estimates.filter(e => e.status === status).length;
+}
+%>
+
+<!-- 관리자 대시보드 -->
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-content">
+      <h1>관리자 대시보드</h1>
+      <p>견적 문의를 효율적으로 관리하세요</p>
+    </div>
+  </div>
+</section>
+
+<!-- 통계 카드 -->
+<section class="section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📋</div>
+        <div class="stat-content">
+          <h3><%= estimates.length %></h3>
+          <p>전체 문의</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-content">
+          <h3><%= getStatusCount(estimates, 'pending') %></h3>
+          <p>대기중</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔄</div>
+        <div class="stat-content">
+          <h3><%= getStatusCount(estimates, 'processing') %></h3>
+          <p>처리중</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-content">
+          <h3><%= getStatusCount(estimates, 'completed') %></h3>
+          <p>완료</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 견적 문의 목록 -->
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="text-center">견적 문의 목록</h2>
+    
+    <!-- 필터 및 검색 -->
+    <div class="admin-controls">
+      <div class="filter-group">
+        <label for="statusFilter">상태:</label>
+        <select id="statusFilter" class="filter-select">
+          <option value="">전체</option>
+          <option value="pending">대기중</option>
+          <option value="processing">처리중</option>
+          <option value="completed">완료</option>
+        </select>
+      </div>
+      <div class="date-group">
+        <label for="startDate">시작일:</label>
+        <input type="date" id="startDate" class="date-input">
+        <label for="endDate">종료일:</label>
+        <input type="date" id="endDate" class="date-input">
+      </div>
+      <div class="search-group">
+        <input type="text" id="searchInput" placeholder="업체명, 담당자명, 연락처로 검색..." class="search-input">
+        <button id="searchBtn" class="search-btn">검색</button>
+        <button id="clearBtn" class="clear-btn">초기화</button>
+      </div>
+    </div>
+
+    <!-- 견적 문의 테이블 -->
+    <div class="admin-table-container">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>업체명</th>
+            <th>담당자</th>
+            <th>연락처</th>
+            <th>서비스</th>
+            <th>수량</th>
+            <th>지역</th>
+            <th>상태</th>
+            <th>등록일</th>
+            <th>관리</th>
+          </tr>
+        </thead>
+        <tbody id="estimatesTableBody">
+          <% estimates.forEach(estimate => { %>
+          <tr data-id="<%= estimate.id %>" data-status="<%= estimate.status %>">
+            <td><%= estimate.id %></td>
+            <td><%= estimate.companyName %></td>
+            <td><%= estimate.contactName %></td>
+            <td>
+              <a href="tel:<%= estimate.phone %>" class="phone-link">
+                <%= estimate.phone %>
+              </a>
+            </td>
+            <td><%= getServiceTypeText(estimate.serviceType) %></td>
+            <td><%= estimate.quantity %>kg</td>
+            <td><%= estimate.location %></td>
+            <td>
+              <span class="status-badge status-<%= estimate.status %>">
+                <%= getStatusText(estimate.status) %>
+              </span>
+            </td>
+            <td><%= new Date(estimate.createdAt).toLocaleDateString('ko-KR') %></td>
+            <td>
+              <button class="btn btn-sm btn-primary view-btn" data-id="<%= estimate.id %>">
+                상세보기
+              </button>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 상세보기 모달 -->
+<div id="detailModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>견적 문의 상세보기</h3>
+      <span class="close">&times;</span>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- 상세 정보가 여기에 표시됩니다 -->
+    </div>
+    <div class="modal-footer">
+      <div class="status-controls">
+        <label for="statusSelect">상태 변경:</label>
+        <select id="statusSelect" class="status-select">
+          <option value="pending">대기중</option>
+          <option value="processing">처리중</option>
+          <option value="completed">완료</option>
+        </select>
+        <button id="updateStatusBtn" class="btn btn-primary">업데이트</button>
+        <button id="cancelBtn" class="btn btn-secondary">취소</button>
+      </div>
+      <div class="admin-notes">
+        <label for="adminNotes">관리자 메모:</label>
+        <textarea id="adminNotes" rows="3" placeholder="관리자 메모를 입력하세요..."></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initAdminPage } from '/js/admin.js';
+
+// 관리자 페이지 초기화
+initAdminPage();
+</script>
+
+<%- include('partials/footer') %>

@@ -9,98 +9,34 @@
   </div>
 </section>
 
-<!-- 문의하기 폼 -->
+<!-- 빠른 문의 안내 -->
 <section class="section">
   <div class="container">
-    <div class="inquiry-container">
-      <div class="inquiry-form-container">
-        <h2>문의하기</h2>
-        <p class="form-description">궁금한 점이나 문의사항이 있으시면 아래 폼을 작성해주세요. 빠른 시일 내에 답변드리겠습니다.</p>
-        
-        <form class="inquiry-form" id="inquiryForm">
-          <div class="form-group">
-            <label for="inquiryType">문의 유형 *</label>
-            <select id="inquiryType" name="inquiryType" required>
-              <option value="">문의 유형을 선택해주세요</option>
-              <option value="service">서비스 문의</option>
-              <option value="estimate">견적 문의</option>
-              <option value="other">기타</option>
-            </select>
-          </div>
-          
-          <div class="form-row">
-            <div class="form-group">
-              <label for="name">성함 *</label>
-              <input type="text" id="name" name="name" required placeholder="성함을 입력해주세요">
-            </div>
-            <div class="form-group">
-              <label for="company">업체명</label>
-              <input type="text" id="company" name="company" placeholder="업체명을 입력해주세요">
-            </div>
-          </div>
-          
-          <div class="form-row">
-            <div class="form-group">
-              <label for="phone">연락처 *</label>
-              <input type="tel" id="phone" name="phone" required placeholder="010-1234-5678">
-            </div>
-            <div class="form-group">
-              <label for="email">이메일</label>
-              <input type="email" id="email" name="email" placeholder="example@email.com">
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label for="subject">제목 *</label>
-            <input type="text" id="subject" name="subject" required placeholder="문의 제목을 입력해주세요">
-          </div>
-          
-          <div class="form-group">
-            <label for="message">문의 내용 *</label>
-            <textarea id="message" name="message" rows="6" required placeholder="문의 내용을 자세히 입력해주세요"></textarea>
-          </div>
-          
-          <div class="form-group">
-            <label class="checkbox-label">
-              <input type="checkbox" name="privacy" required>
-              <span class="checkmark"></span>
-              개인정보 수집 및 이용에 동의합니다 *
-            </label>
-          </div>
-          
-          <button type="submit" class="btn btn-primary btn-large">문의하기</button>
-          <p class="form-note">* 필수 입력 항목입니다. 문의 접수 후 24시간 이내에 답변드리겠습니다.</p>
-        </form>
-      </div>
-      
-      <div class="inquiry-info">
-        <h3 class="text-center">빠른 문의 안내</h3>
-        <div class="quick-contact">
-          <div class="quick-item">
-            <h4>긴급 문의</h4>
-            <p>세탁물 긴급 처리가 필요한 경우</p>
-            <a href="tel:010-7136-6165" class="quick-link" style="color: inherit !important; text-decoration: none !important;">010-7136-6165</a>
-          </div>
-          <div class="quick-item">
-            <h4>견적 문의</h4>
-            <p>세탁 서비스 견적이 필요한 경우</p>
-            <a href="/estimate" class="quick-link">견적 문의하기</a>
-          </div>
-          <div class="quick-item">
-            <h4>시설 견학</h4>
-            <p>세탁 시설 견학을 원하시는 경우</p>
-            <a href="tel:010-7136-6165" class="quick-link" style="color: inherit !important; text-decoration: none !important;">전화 문의</a>
-          </div>
-           <div class="quick-item">
-             <h4>서비스 시간</h4>
-             <div class="service-hours-content">
-               <p><strong>세탁 서비스:</strong> <span class="highlight-text">연중무휴 24시간</span></p>
-               <p><strong>고객 상담:</strong> 평일 9:00 – 22:00</p>
-               <p><strong>토요일 상담:</strong> 11:00 – 16:00</p>
-               <p><strong>긴급 문의:</strong> 24시간 대응</p>
-             </div>
-           </div>
-        </div>    
+    <h2 class="text-center">빠른 문의 안내</h2>
+    <p class="text-center section-subtitle">언제든지 편리하게 문의하실 수 있습니다. 빠른 답변으로 고객님의 만족을 최우선으로 생각합니다.</p>
+    <div class="service-features">
+      <a href="tel:010-7136-6165" class="card card-clickable" style="color: inherit !important; text-decoration: none !important;">
+        <div class="card-icon">📞</div>
+        <h3>긴급 문의</h3>
+        <p>세탁물 긴급 처리가 필요한 경우</p>
+        <div class="feature-highlight">24시간 대응</div>
+      </a>
+      <a href="/estimate" class="card card-clickable" style="color: inherit !important; text-decoration: none !important;">
+        <div class="card-icon">💰</div>
+        <h3>견적 문의</h3>
+        <p>세탁 서비스 견적이 필요한 경우</p>
+        <div class="feature-highlight">무료 견적</div>
+      </a>
+      <div class="card">
+        <div class="card-icon">⏰</div>
+        <h3>서비스 시간</h3>
+        <p>언제든지 편리하게 이용하실 수 있습니다</p>
+        <div class="service-hours-content">
+          <p><strong>세탁 서비스:</strong> <span class="highlight-text">연중무휴 24시간</span></p>
+          <p><strong>고객 상담:</strong> 평일 9:00 – 22:00</p>
+          <p><strong>토요일 상담:</strong> 11:00 – 16:00</p>
+          <p><strong>긴급 문의:</strong> 24시간 대응</p>
+        </div>
       </div>
     </div>
   </div>

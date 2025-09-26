@@ -18,26 +18,26 @@
         <h2>견적 문의하기</h2>
         <p class="form-description">세탁 서비스 견적을 받기 위해 아래 정보를 입력해주세요. 빠른 시일 내에 연락드리겠습니다.</p>
         
-        <form class="estimate-form" id="estimateForm">
+        <form class="estimate-form" id="estimateForm" autocomplete="off">
           <div class="form-group">
             <label for="companyName">업체명/성함 *</label>
-            <input type="text" id="companyName" name="companyName" required placeholder="업체명 또는 성함을 입력해주세요">
+            <input type="text" id="companyName" name="companyName" required placeholder="업체명 또는 성함을 입력해주세요" autocomplete="off">
           </div>
           
           <div class="form-row">
             <div class="form-group">
               <label for="contactName">담당자명 *</label>
-              <input type="text" id="contactName" name="contactName" required placeholder="담당자명을 입력해주세요">
+              <input type="text" id="contactName" name="contactName" required placeholder="담당자명을 입력해주세요" autocomplete="off">
             </div>
             <div class="form-group">
               <label for="phone">연락처 *</label>
-              <input type="tel" id="phone" name="phone" required placeholder="010-1234-5678">
+              <input type="tel" id="phone" name="phone" required placeholder="010-1234-5678" autocomplete="off">
             </div>
           </div>
           
           <div class="form-group">
-            <label for="email">이메일</label>
-            <input type="email" id="email" name="email" placeholder="example@email.com">
+            <label for="email">이메일 *</label>
+            <input type="email" id="email" name="email" required placeholder="example@email.com" autocomplete="off">
           </div>
           
           <div class="form-group">
@@ -68,7 +68,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="quantity">세탁물 수량 (kg) *</label>
-              <input type="number" id="quantity" name="quantity" required placeholder="예: 50" min="1">
+              <input type="number" id="quantity" name="quantity" required placeholder="예: 50" min="1" autocomplete="off">
             </div>
             <div class="form-group">
               <label for="frequency">세탁 빈도 *</label>
@@ -85,17 +85,17 @@
           
           <div class="form-group">
             <label for="location">수거/배송 지역 *</label>
-            <input type="text" id="location" name="location" required placeholder="예: 경기도 파주시">
+            <input type="text" id="location" name="location" required placeholder="예: 경기도 파주시" autocomplete="off">
           </div>
           
           <div class="form-group">
             <label for="specialRequirements">특별 요구사항</label>
-            <textarea id="specialRequirements" name="specialRequirements" rows="4" placeholder="특별한 요구사항이나 문의사항이 있으시면 입력해주세요"></textarea>
+            <textarea id="specialRequirements" name="specialRequirements" rows="4" placeholder="특별한 요구사항이나 문의사항이 있으시면 입력해주세요" autocomplete="off"></textarea>
           </div>
           
           <div class="form-group">
             <label for="message">기타 문의사항</label>
-            <textarea id="message" name="message" rows="3" placeholder="기타 문의사항을 입력해주세요"></textarea>
+            <textarea id="message" name="message" rows="3" placeholder="기타 문의사항을 입력해주세요" autocomplete="off"></textarea>
           </div>
           
           <button type="submit" class="btn btn-primary btn-large">견적 문의하기</button>

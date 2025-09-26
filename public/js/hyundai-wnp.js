@@ -535,3 +535,211 @@ function hideLoading() {
 
 // 페이지 로드 완료 시 로딩 숨기기
 window.addEventListener('load', hideLoading);
+
+// 견적 폼 검증 및 포커싱 개선
+function initEstimateForm() {
+    const estimateForm = document.getElementById('estimateForm');
+    if (!estimateForm) {
+        console.log('견적 폼을 찾을 수 없습니다.');
+        return;
+    }
+    console.log('견적 폼 초기화 시작');
+
+    estimateForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        console.log('견적 폼 제출 시도');
+        
+        // 필수 필드들 정의 (순서대로)
+        const requiredFields = [
+            { id: 'companyName', name: '업체명/성함' },
+            { id: 'contactName', name: '담당자명' },
+            { id: 'phone', name: '연락처' },
+            { id: 'email', name: '이메일' },
+            { id: 'serviceType', name: '서비스 유형' },
+            { id: 'laundryType', name: '세탁물 종류' },
+            { id: 'quantity', name: '세탁물 수량' },
+            { id: 'frequency', name: '세탁 빈도' },
+            { id: 'location', name: '수거/배송 지역' }
+        ];
+
+        // 보안 검증 함수
+        function sanitizeInput(value) {
+            if (!value) return '';
+            return value
+                .replace(/[<>]/g, '') // HTML 태그 제거
+                .replace(/javascript:/gi, '') // JavaScript 프로토콜 제거
+                .replace(/on\w+\s*=/gi, '') // 이벤트 핸들러 제거
+                .replace(/script/gi, '') // script 태그 제거
+                .trim();
+        }
+
+        // 이메일 검증 함수
+        function validateEmail(email) {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailRegex.test(email);
+        }
+
+        // 전화번호 검증 함수
+        function validatePhone(phone) {
+            const phoneRegex = /^[0-9-+\s()]+$/;
+            return phoneRegex.test(phone) && phone.replace(/[^0-9]/g, '').length >= 10;
+        }
+
+        // 첫 번째 오류 필드 찾기
+        let firstErrorField = null;
+        
+        for (const field of requiredFields) {
+            const element = document.getElementById(field.id);
+            if (!element) continue;
+            
+            const value = sanitizeInput(element.value);
+            element.value = value; // 정화된 값으로 업데이트
+            
+            // 빈 값 체크
+            if (!value) {
+                firstErrorField = element;
+                break;
+            }
+            
+            // 이메일 검증
+            if (field.id === 'email' && !validateEmail(value)) {
+                firstErrorField = element;
+                alert('올바른 이메일 형식을 입력해주세요.');
+                break;
+            }
+            
+            // 전화번호 검증
+            if (field.id === 'phone' && !validatePhone(value)) {
+                firstErrorField = element;
+                alert('올바른 전화번호를 입력해주세요. (최소 10자리)');
+                break;
+            }
+        }
+
+        // 오류가 있으면 첫 번째 오류 필드로 포커싱
+        if (firstErrorField) {
+            // CSS scroll-margin-top이 자동으로 헤더 높이만큼 여유를 둠
+            firstErrorField.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start',
+                inline: 'nearest'
+            });
+            
+            // 포커스 적용
+            firstErrorField.focus();
+            
+            // 필드 하이라이트 효과
+            firstErrorField.style.borderColor = '#ff4444';
+            firstErrorField.style.boxShadow = '0 0 0 2px rgba(255, 68, 68, 0.2)';
+            firstErrorField.style.backgroundColor = '#fff5f5';
+            
+            // 3초 후 하이라이트 제거
+            setTimeout(() => {
+                firstErrorField.style.borderColor = '';
+                firstErrorField.style.boxShadow = '';
+                firstErrorField.style.backgroundColor = '';
+            }, 3000);
+            
+            return false;
+        }
+
+        // 모든 필드가 유효하면 DB에 저장
+        if (firstErrorField === null) {
+            submitEstimateToDB();
+        }
+    });
+}
+
+// DB에 견적 문의 제출 함수
+async function submitEstimateToDB() {
+    const formData = {
+        companyName: document.getElementById('companyName').value,
+        contactName: document.getElementById('contactName').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        serviceType: document.getElementById('serviceType').value,
+        laundryType: document.getElementById('laundryType').value,
+        quantity: document.getElementById('quantity').value,
+        frequency: document.getElementById('frequency').value,
+        location: document.getElementById('location').value,
+        specialRequirements: document.getElementById('specialRequirements').value,
+        message: document.getElementById('message').value
+    };
+
+    console.log('견적 문의 데이터:', formData);
+
+    try {
+        // 서버에 POST 요청
+        const response = await fetch('/estimate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+        
+        if (result.success) {
+            // 성공 시 폼 리셋
+            document.getElementById('estimateForm').reset();
+            
+            // 성공 메시지 표시
+            alert(result.message);
+            console.log('견적 문의 저장 완료:', result.estimateId);
+        } else {
+            // 오류 메시지 표시
+            alert(result.message);
+            console.error('견적 문의 저장 실패:', result.message);
+        }
+        
+    } catch (error) {
+        console.error('견적 문의 제출 오류:', error);
+        alert('견적 문의 제출 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+}
+
+// 서비스 유형 텍스트 변환
+function getServiceTypeText(value) {
+    const types = {
+        'health': '헬스·스포츠센터 세탁',
+        'sauna': '대형사우나·찜질방 세탁',
+        'corporate': '기업체 연수원 세탁',
+        'school': '학교·학원 세탁',
+        'other': '기타'
+    };
+    return types[value] || value;
+}
+
+// 세탁물 종류 텍스트 변환
+function getLaundryTypeText(value) {
+    const types = {
+        'workout': '운동복',
+        'towel': '수건',
+        'sauna': '사우나복',
+        'uniform': '제복',
+        'bedding': '침구류',
+        'mixed': '혼합'
+    };
+    return types[value] || value;
+}
+
+// 세탁 빈도 텍스트 변환
+function getFrequencyText(value) {
+    const types = {
+        'daily': '매일',
+        'weekly': '주 1-2회',
+        'biweekly': '2주 1회',
+        'monthly': '월 1회',
+        'one-time': '1회성'
+    };
+    return types[value] || value;
+}
+
+// 견적 폼 초기화 - 즉시 실행
+if (document.getElementById('estimateForm')) {
+    initEstimateForm();
+} else {
+    // DOM이 아직 로드되지 않았다면 DOMContentLoaded 이벤트 대기
+    document.addEventListener('DOMContentLoaded', initEstimateForm);
+}
