@@ -3,10 +3,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // 핵심 기능 초기화 - 안전한 초기화
-    initBannerSlider();
-    initMobileMenu();
-    initScrollAnimations();
-    initSmoothScroll();
+        initBannerSlider();
+        initMobileMenu();
+        initScrollAnimations();
+        initSmoothScroll();
+        initTouchZoomPrevention();
         // initBannerButtons(); // 배너 버튼은 순수 HTML 링크로 동작
         
         
@@ -198,41 +199,85 @@ function initBannerSlider() {
             if (e.key === 'ArrowRight') { next(); resetAutoplay(); }
         });
 
-        // pointer/touch swipe
+        // 터치 스와이프 이벤트 개선
         let startX = 0;
+        let startY = 0;
         let deltaX = 0;
+        let deltaY = 0;
         let pointerDown = false;
+        let isScrolling = false;
 
         viewport.addEventListener('pointerdown', (e) => {
             // 버튼이나 링크 클릭인 경우 슬라이더 이벤트 무시
             if (e.target.closest('a, button')) {
                 return;
             }
+            
             pointerDown = true;
             startX = e.clientX;
+            startY = e.clientY;
+            deltaX = 0;
+            deltaY = 0;
+            isScrolling = false;
+            
             track.style.transition = 'none';
             try { viewport.setPointerCapture(e.pointerId); } catch (e) { }
             pauseAutoplay();
+            
+            // 기본 터치 동작 방지 (스크롤, 확대 등)
+            e.preventDefault();
         });
 
         viewport.addEventListener('pointermove', (e) => {
             if (!pointerDown) return;
+            
             deltaX = e.clientX - startX;
-            const percent = (deltaX / viewport.offsetWidth) * 100;
-            const baseTranslate = -index * slideWidthPercent;
-            track.style.transform = `translateX(${baseTranslate + percent}%)`;
+            deltaY = e.clientY - startY;
+            
+            // 수직 스크롤인지 확인 (수직 이동이 수평 이동보다 클 때)
+            if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 10) {
+                isScrolling = true;
+                return; // 수직 스크롤이면 슬라이더 동작 중단
+            }
+            
+            // 수평 스와이프인 경우에만 슬라이더 동작
+            if (!isScrolling) {
+                const percent = (deltaX / viewport.offsetWidth) * 100;
+                const baseTranslate = -index * slideWidthPercent;
+                track.style.transform = `translateX(${baseTranslate + percent}%)`;
+                
+                // 수평 스와이프 시 기본 동작 방지
+                e.preventDefault();
+            }
         });
 
         function endPointer() {
             if (!pointerDown) return;
             pointerDown = false;
             track.style.transition = '';
-            if (Math.abs(deltaX) > SWIPE_THRESHOLD) {
-                if (deltaX > 0) prev(); else next();
+            
+            // 스크롤 중이었다면 슬라이더 동작하지 않음
+            if (isScrolling) {
+                setPositionByIndex(false);
+                deltaX = 0;
+                deltaY = 0;
+                resetAutoplay();
+                return;
+            }
+            
+            // 수평 스와이프인 경우에만 슬라이더 변경
+            if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
+                if (deltaX > 0) {
+                    prev();
+                } else {
+                    next();
+                }
             } else {
                 setPositionByIndex(false);
             }
+            
             deltaX = 0;
+            deltaY = 0;
             resetAutoplay();
         }
 
@@ -696,6 +741,149 @@ async function submitEstimateToDB() {
     } catch (error) {
         console.error('견적 문의 제출 오류:', error);
         alert('견적 문의 제출 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+}
+
+// 이미지 모달 기능
+function openImageModal(imageSrc, title, description) {
+    try {
+        // 기존 모달이 있다면 제거
+        const existingModal = document.getElementById('imageModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+        
+        // 모달 HTML 생성
+        const modalHTML = `
+            <div id="imageModal" class="image-modal">
+                <div class="image-modal-content">
+                    <span class="image-modal-close" onclick="closeImageModal()">&times;</span>
+                    <img src="${imageSrc}" alt="${title}" loading="lazy" />
+                    <div class="image-modal-info">
+                        <h3>${title}</h3>
+                        <p>${description}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // 모달을 body에 추가
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        const modal = document.getElementById('imageModal');
+        
+        // 스크롤 방지
+        document.body.style.overflow = 'hidden';
+        
+        // 모달 표시
+        modal.style.display = 'block';
+        
+        // 애니메이션을 위해 다음 프레임에서 show 클래스 추가
+        requestAnimationFrame(() => {
+            modal.classList.add('show');
+        });
+        
+        // ESC 키로 닫기
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') {
+                closeImageModal();
+                document.removeEventListener('keydown', handleEscape);
+            }
+        };
+        document.addEventListener('keydown', handleEscape);
+        
+        // 배경 클릭으로 닫기
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeImageModal();
+            }
+        });
+        
+    } catch (error) {
+        console.error('이미지 모달 열기 오류:', error);
+    }
+}
+
+function closeImageModal() {
+    try {
+        const modal = document.getElementById('imageModal');
+        if (modal) {
+            // 애니메이션 제거
+            modal.classList.remove('show');
+            
+            // 애니메이션 완료 후 모달 제거
+            setTimeout(() => {
+                modal.remove();
+                document.body.style.overflow = '';
+            }, 300);
+        }
+    } catch (error) {
+        console.error('이미지 모달 닫기 오류:', error);
+    }
+}
+
+// 터치 확대 방지 기능
+function initTouchZoomPrevention() {
+    try {
+        let lastTouchEnd = 0;
+        let touchCount = 0;
+        let touchStartTime = 0;
+        
+        // 더블탭 확대 방지
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            
+            // 연속된 터치 감지
+            if (now - lastTouchEnd <= 300) {
+                touchCount++;
+                if (touchCount >= 2) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return false;
+                }
+            } else {
+                touchCount = 1;
+            }
+            
+            lastTouchEnd = now;
+        }, { passive: false });
+        
+        // 핀치 줌 방지
+        document.addEventListener('touchstart', function(event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+                event.stopPropagation();
+                return false;
+            }
+        }, { passive: false });
+        
+        document.addEventListener('touchmove', function(event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+                event.stopPropagation();
+                return false;
+            }
+        }, { passive: false });
+        
+        // 키보드 줌 방지 (Ctrl + +, Ctrl + -)
+        document.addEventListener('keydown', function(event) {
+            if ((event.ctrlKey || event.metaKey) && (event.keyCode === 61 || event.keyCode === 107 || event.keyCode === 173 || event.keyCode === 109 || event.keyCode === 187 || event.keyCode === 189)) {
+                event.preventDefault();
+                return false;
+            }
+        });
+        
+        // 마우스 휠 줌 방지
+        document.addEventListener('wheel', function(event) {
+            if (event.ctrlKey || event.metaKey) {
+                event.preventDefault();
+                return false;
+            }
+        }, { passive: false });
+        
+        console.log('터치 확대 방지 기능이 활성화되었습니다.');
+        
+    } catch (error) {
+        console.error('터치 확대 방지 초기화 오류:', error);
     }
 }
 
