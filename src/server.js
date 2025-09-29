@@ -8,7 +8,6 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import indexRouter from "./routes/index.js";
 import { runOutboxOnce, retryFailedNotifications } from "./workers/outboxWorker.js";
-import { initializeTables, checkGalleryTableStatus } from "./config/database.js";
 
 dotenv.config();
 
@@ -159,16 +158,6 @@ const startServer = async () => {
   try {
     // 데이터베이스 테이블 초기화
     console.log('🔧 데이터베이스 테이블을 초기화합니다...');
-    const tablesInitialized = await initializeTables();
-    
-    if (tablesInitialized) {
-      console.log('✅ 데이터베이스 테이블 초기화가 완료되었습니다.');
-      
-      // 갤러리 테이블 상태 확인
-      await checkGalleryTableStatus();
-    } else {
-      console.warn('⚠️ 데이터베이스 테이블 초기화에 문제가 있을 수 있습니다.');
-    }
     
     // HTTP 서버 시작
     app.listen(PORT, HOST, () => {
