@@ -164,7 +164,7 @@ app.listen(PORT, HOST, () => {
   // 5초마다 알림 처리
   setInterval(() => {
     runOutboxOnce().catch(err => {
-      console.error('[Server] Outbox 워커 에러:', err.message);
+      // console.error('[Server] Outbox 워커 에러:', err.message);
     });
   }, 5000);
   
