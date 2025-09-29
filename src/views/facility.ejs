@@ -25,49 +25,62 @@
   <div class="container">
     <h2 class="text-center">세탁 시설 갤러리</h2>
     <div class="gallery-grid">
-      <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop', '대형 세탁기', '업소용 대용량 세탁기')">
-        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
-        <div class="gallery-overlay">
-          <h3>대형 세탁기</h3>
-          <p>업소용 대용량 세탁기</p>
+      <% if (galleryImages && galleryImages.length > 0) { %>
+        <% galleryImages.forEach(image => { %>
+          <div class="gallery-item" onclick="openImageModal('/uploads/gallery/<%= image.filename %>', '<%= image.title %>', '<%= image.description || '' %>')">
+            <img src="/uploads/gallery/<%= image.filename %>" alt="<%= image.title %>" loading="lazy" />
+            <div class="gallery-overlay">
+              <h3><%= image.title %></h3>
+              <p><%= image.description || '' %></p>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <!-- 기본 갤러리 (업로드된 이미지가 없을 때) -->
+        <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop', '대형 세탁기', '업소용 대용량 세탁기')">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
+          <div class="gallery-overlay">
+            <h3>대형 세탁기</h3>
+            <p>업소용 대용량 세탁기</p>
+          </div>
         </div>
-      </div>
-      <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', '건조 시설', '대용량 건조기')">
-        <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
-        <div class="gallery-overlay">
-          <h3>건조 시설</h3>
-          <p>대용량 건조기</p>
+        <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', '건조 시설', '대용량 건조기')">
+          <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
+          <div class="gallery-overlay">
+            <h3>건조 시설</h3>
+            <p>대용량 건조기</p>
+          </div>
         </div>
-      </div>
-      <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop', '정리 시설', '세탁물 정리 및 분류')">
-        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
-        <div class="gallery-overlay">
-          <h3>정리 시설</h3>
-          <p>세탁물 정리 및 분류</p>
+        <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop', '정리 시설', '세탁물 정리 및 분류')">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
+          <div class="gallery-overlay">
+            <h3>정리 시설</h3>
+            <p>세탁물 정리 및 분류</p>
+          </div>
         </div>
-      </div>
-      <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', '포장 시설', '세탁물 포장 및 배송 준비')">
-        <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
-        <div class="gallery-overlay">
-          <h3>포장 시설</h3>
-          <p>세탁물 포장 및 배송 준비</p>
+        <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop', '포장 시설', '세탁물 포장 및 배송 준비')">
+          <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
+          <div class="gallery-overlay">
+            <h3>포장 시설</h3>
+            <p>세탁물 포장 및 배송 준비</p>
+          </div>
         </div>
-      </div>
-      <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop', '품질 관리', '세탁 품질 검사')">
-        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
-        <div class="gallery-overlay">
-          <h3>품질 관리</h3>
-          <p>세탁 품질 검사</p>
+        <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop', '품질 관리', '세탁 품질 검사')">
+          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
+          <div class="gallery-overlay">
+            <h3>품질 관리</h3>
+            <p>세탁 품질 검사</p>
+          </div>
         </div>
-      </div>
-      <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=800&h=600&fit=crop', '배송 준비', '배송 준비 및 관리')">
-        <img src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
-        <div class="gallery-overlay">
-          <h3>배송 준비</h3>
-          <p>배송 준비 및 관리</p>
+        <div class="gallery-item" onclick="openImageModal('https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=800&h=600&fit=crop', '배송 준비', '배송 준비 및 관리')">
+          <img src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400&h=300&fit=crop" alt="현대 W&P 세탁 처리시설" />
+          <div class="gallery-overlay">
+            <h3>배송 준비</h3>
+            <p>배송 준비 및 관리</p>
+          </div>
         </div>
-      </div>
-    </div>
+      <% } %>
+    </div>    
   </div>
 </section>
 

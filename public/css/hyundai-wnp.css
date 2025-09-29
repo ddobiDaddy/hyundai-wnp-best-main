@@ -733,6 +733,7 @@ h2.text-center {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .date-group {
@@ -1125,6 +1126,7 @@ h2.text-center {
   .filter-group, .search-group {
     flex-direction: column;
     align-items: stretch;
+
   }
   
   .search-input {

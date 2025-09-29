@@ -8,6 +8,7 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import indexRouter from "./routes/index.js";
 import { runOutboxOnce, retryFailedNotifications } from "./workers/outboxWorker.js";
+import { initializeTables, checkGalleryTableStatus } from "./config/database.js";
 
 dotenv.config();
 
@@ -153,30 +154,55 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 
-// HTTP 서버 시작
-app.listen(PORT, HOST, () => {
-  console.log(`✅ Server listening on http://${HOST}:${PORT}`);
-  console.log(`🌐 Access your site at: http://${HOST}:${PORT}`);
-  
-  // 텔레그램 알림 워커 시작
-  console.log('📱 텔레그램 알림 워커를 시작합니다...');
-  
-  // 5초마다 알림 처리
-  setInterval(() => {
-    runOutboxOnce().catch(err => {
-      // console.error('[Server] Outbox 워커 에러:', err.message);
+// 서버 시작 전 테이블 초기화
+const startServer = async () => {
+  try {
+    // 데이터베이스 테이블 초기화
+    console.log('🔧 데이터베이스 테이블을 초기화합니다...');
+    const tablesInitialized = await initializeTables();
+    
+    if (tablesInitialized) {
+      console.log('✅ 데이터베이스 테이블 초기화가 완료되었습니다.');
+      
+      // 갤러리 테이블 상태 확인
+      await checkGalleryTableStatus();
+    } else {
+      console.warn('⚠️ 데이터베이스 테이블 초기화에 문제가 있을 수 있습니다.');
+    }
+    
+    // HTTP 서버 시작
+    app.listen(PORT, HOST, () => {
+      console.log(`✅ Server listening on http://${HOST}:${PORT}`);
+      console.log(`🌐 Access your site at: http://${HOST}:${PORT}`);
+      
+      // 텔레그램 알림 워커 시작
+      console.log('📱 텔레그램 알림 워커를 시작합니다...');
+      
+      // 5초마다 알림 처리
+      setInterval(() => {
+        runOutboxOnce().catch(err => {
+          // console.error('[Server] Outbox 워커 에러:', err.message);
+        });
+      }, 5000);
+      
+      // 1시간마다 실패한 알림 재처리
+      setInterval(() => {
+        retryFailedNotifications().catch(err => {
+          console.error('[Server] 실패 알림 재처리 에러:', err.message);
+        });
+      }, 60 * 60 * 1000);
+      
+      console.log('✅ 텔레그램 알림 시스템이 활성화되었습니다.');
     });
-  }, 5000);
-  
-  // 1시간마다 실패한 알림 재처리
-  setInterval(() => {
-    retryFailedNotifications().catch(err => {
-      console.error('[Server] 실패 알림 재처리 에러:', err.message);
-    });
-  }, 60 * 60 * 1000);
-  
-  console.log('✅ 텔레그램 알림 시스템이 활성화되었습니다.');
-});
+    
+  } catch (error) {
+    console.error('❌ 서버 시작 중 오류 발생:', error.message);
+    process.exit(1);
+  }
+};
+
+// 서버 시작
+startServer();
 
 // HTTPS 서버 설정 (SSL 인증서 설정 후 주석 해제)
 // import https from 'https';
