@@ -35,8 +35,8 @@
   <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap">
   
-  <link rel="stylesheet" href="/css/hyundai-wnp.css" />
-  <script defer src="/js/hyundai-wnp.js"></script>
+  <link rel="stylesheet" href="/css/hyundai-wnp.css?v=<%= typeof version !== 'undefined' ? version : new Date().toISOString().slice(0,10).replace(/-/g,'') %>" />
+  <script defer src="/js/hyundai-wnp.js?v=<%= typeof version !== 'undefined' ? version : new Date().toISOString().slice(0,10).replace(/-/g,'') %>"></script>
 </head>
 <body>
   <header class="site-header">

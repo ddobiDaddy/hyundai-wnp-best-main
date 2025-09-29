@@ -5,12 +5,24 @@ import compression from "compression";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
+import fs from "fs";
 import indexRouter from "./routes/index.js";
+import { runOutboxOnce, retryFailedNotifications } from "./workers/outboxWorker.js";
 
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// 간단한 날짜 기반 버전 생성 함수
+function getStaticVersion() {
+  const now = new Date();
+  // YYYYMMDD 형식으로 날짜 반환
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}${month}${day}`;
+}
 
 const app = express();
 
@@ -86,18 +98,30 @@ app.use(express.static(path.join(__dirname, "../public"), {
   maxAge: process.env.NODE_ENV === "production" ? "7d" : 0,
   etag: true,
   lastModified: true,
-  setHeaders: (res, path) => {
-    // CSS와 JS 파일은 더 긴 캐시 설정
-    if (path.endsWith('.css') || path.endsWith('.js')) {
+  setHeaders: (res, path, stat) => {
+    // 버전 파라미터가 있는 파일 (CSS, JS) - 장기 캐시
+    if (path.includes('?v=') && (path.includes('.css') || path.includes('.js'))) {
       res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      res.setHeader('Expires', new Date(Date.now() + 31536000000).toUTCString());
     }
-    // 이미지는 중간 캐시 설정
-    if (path.match(/\.(jpg|jpeg|png|gif|webp|svg)$/)) {
-      res.setHeader('Cache-Control', 'public, max-age=2592000');
-    }
-    // 폰트 파일은 장기 캐시
-    if (path.match(/\.(woff|woff2|eot|ttf)$/)) {
-      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    // 버전 파라미터가 없는 정적 파일들
+    else {
+      // CSS와 JS 파일 (버전 파라미터 없음) - 짧은 캐시
+      if (path.endsWith('.css') || path.endsWith('.js')) {
+        res.setHeader('Cache-Control', 'public, max-age=300'); // 5분
+      }
+      // 이미지는 중간 캐시 설정
+      else if (path.match(/\.(jpg|jpeg|png|gif|webp|svg)$/)) {
+        res.setHeader('Cache-Control', 'public, max-age=2592000'); // 30일
+      }
+      // 폰트 파일은 장기 캐시
+      else if (path.match(/\.(woff|woff2|eot|ttf)$/)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable'); // 1년
+      }
+      // 기타 파일들
+      else {
+        res.setHeader('Cache-Control', 'public, max-age=86400'); // 1일
+      }
     }
   }
 }));
@@ -105,6 +129,12 @@ app.use(express.static(path.join(__dirname, "../public"), {
 // View engine
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+
+// 정적 파일 버전을 모든 뷰에 전달하는 미들웨어
+app.use((req, res, next) => {
+  res.locals.version = getStaticVersion();
+  next();
+});
 
 // Routes
 app.use("/", indexRouter);
@@ -127,6 +157,25 @@ const HOST = process.env.HOST || '0.0.0.0';
 app.listen(PORT, HOST, () => {
   console.log(`✅ Server listening on http://${HOST}:${PORT}`);
   console.log(`🌐 Access your site at: http://${HOST}:${PORT}`);
+  
+  // 텔레그램 알림 워커 시작
+  console.log('📱 텔레그램 알림 워커를 시작합니다...');
+  
+  // 5초마다 알림 처리
+  setInterval(() => {
+    runOutboxOnce().catch(err => {
+      console.error('[Server] Outbox 워커 에러:', err.message);
+    });
+  }, 5000);
+  
+  // 1시간마다 실패한 알림 재처리
+  setInterval(() => {
+    retryFailedNotifications().catch(err => {
+      console.error('[Server] 실패 알림 재처리 에러:', err.message);
+    });
+  }, 60 * 60 * 1000);
+  
+  console.log('✅ 텔레그램 알림 시스템이 활성화되었습니다.');
 });
 
 // HTTPS 서버 설정 (SSL 인증서 설정 후 주석 해제)
