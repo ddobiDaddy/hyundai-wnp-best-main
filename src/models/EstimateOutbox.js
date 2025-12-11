@@ -49,10 +49,10 @@ const EstimateOutbox = sequelize.define('EstimateOutbox', {
       fields: ['state']
     },
     {
-      fields: ['nextAttemptAt']
+      fields: ['next_attempt_at']
     },
     {
-      fields: ['estimateId']
+      fields: ['estimate_id']
     }
   ]
 });

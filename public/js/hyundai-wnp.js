@@ -36,6 +36,12 @@ function initBannerSlider() {
         let originalSlides = Array.from(track.children);
         let originalCount = originalSlides.length;
 
+        // 원본 슬라이드가 없으면 초기화 중단
+        if (originalCount === 0) {
+            console.warn('슬라이더에 원본 슬라이드가 없습니다.');
+            return;
+        }
+
         let slidesPerView = computeSlidesPerView();
         let slideWidthPercent = 100 / slidesPerView;
         let index = slidesPerView; // start at first real slide after clones
@@ -46,9 +52,9 @@ function initBannerSlider() {
         // utility to compute slides per view based on viewport width
         function computeSlidesPerView() {
             const w = window.innerWidth;
-            if (w >= 1920) return 4;
-            if (w >= 1600) return 3;
-            if (w >= 1200) return 2;
+            if (w >= 1920) return Math.min(4, originalCount); // 원본 개수보다 클 수 없음
+            if (w >= 1600) return Math.min(3, originalCount);
+            if (w >= 1200) return Math.min(2, originalCount);
             return 1;
         }
 
@@ -57,7 +63,7 @@ function initBannerSlider() {
         }
 
         // gather original nodes from a hidden template by reading from an initial list saved in DOM
-        const initialSlidesHTML = originalSlides.map(s => s.outerHTML);
+        let initialSlidesHTML = originalSlides.map(s => s.outerHTML);
 
         function rebuild() {
             // stop animations and timers
@@ -81,24 +87,39 @@ function initBannerSlider() {
                 const temp = document.createElement('div');
                 temp.innerHTML = html.trim();
                 return temp.firstChild;
-            });
+            }).filter(slide => slide !== null && slide !== undefined); // null/undefined 필터링
+
+            // 원본 슬라이드가 없으면 초기화 중단
+            if (originals.length === 0) {
+                console.warn('원본 슬라이드가 없습니다.');
+                return;
+            }
 
             // determine clones: clone last N and first N
             for (let i = originals.length - slidesPerView; i < originals.length; i++) {
                 const idx = (i + originals.length) % originals.length;
-                const clone = originals[idx].cloneNode(true);
-                clone.dataset.clone = 'last';
-                clonesBefore.push(clone);
+                const originalSlide = originals[idx];
+                if (originalSlide && typeof originalSlide.cloneNode === 'function') {
+                    const clone = originalSlide.cloneNode(true);
+                    clone.dataset.clone = 'last';
+                    clonesBefore.push(clone);
+                }
             }
             for (let i = 0; i < originals.length; i++) {
-                const node = originals[i].cloneNode(true);
-                node.removeAttribute('data-clone');
-                track.appendChild(node);
+                const originalSlide = originals[i];
+                if (originalSlide && typeof originalSlide.cloneNode === 'function') {
+                    const node = originalSlide.cloneNode(true);
+                    node.removeAttribute('data-clone');
+                    track.appendChild(node);
+                }
             }
             for (let i = 0; i < slidesPerView; i++) {
-                const clone = originals[i].cloneNode(true);
-                clone.dataset.clone = 'first';
-                track.appendChild(clone);
+                const originalSlide = originals[i % originals.length]; // 배열 범위 체크
+                if (originalSlide && typeof originalSlide.cloneNode === 'function') {
+                    const clone = originalSlide.cloneNode(true);
+                    clone.dataset.clone = 'first';
+                    track.appendChild(clone);
+                }
             }
 
             // insert clonesBefore at the start
@@ -206,6 +227,8 @@ function initBannerSlider() {
         let deltaY = 0;
         let pointerDown = false;
         let isScrolling = false;
+        let animationFrameId = null;
+        let lastMoveTime = 0;
 
         viewport.addEventListener('pointerdown', (e) => {
             // 버튼이나 링크 클릭인 경우 슬라이더 이벤트 무시
@@ -219,6 +242,7 @@ function initBannerSlider() {
             deltaX = 0;
             deltaY = 0;
             isScrolling = false;
+            lastMoveTime = Date.now();
             
             track.style.transition = 'none';
             try { viewport.setPointerCapture(e.pointerId); } catch (e) { }
@@ -231,20 +255,34 @@ function initBannerSlider() {
         viewport.addEventListener('pointermove', (e) => {
             if (!pointerDown) return;
             
+            const currentTime = Date.now();
+            const timeDelta = currentTime - lastMoveTime;
+            lastMoveTime = currentTime;
+            
             deltaX = e.clientX - startX;
             deltaY = e.clientY - startY;
             
-            // 수직 스크롤인지 확인 (수직 이동이 수평 이동보다 클 때)
-            if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 10) {
+            // 수직 스크롤인지 확인 (더 관대한 조건)
+            if (Math.abs(deltaY) > Math.abs(deltaX) * 1.5 && Math.abs(deltaY) > 15) {
                 isScrolling = true;
                 return; // 수직 스크롤이면 슬라이더 동작 중단
             }
             
             // 수평 스와이프인 경우에만 슬라이더 동작
-            if (!isScrolling) {
-                const percent = (deltaX / viewport.offsetWidth) * 100;
-                const baseTranslate = -index * slideWidthPercent;
-                track.style.transform = `translateX(${baseTranslate + percent}%)`;
+            if (!isScrolling && Math.abs(deltaX) > 5) {
+                // requestAnimationFrame으로 부드러운 애니메이션
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                }
+                
+                animationFrameId = requestAnimationFrame(() => {
+                    const percent = (deltaX / viewport.offsetWidth) * 100;
+                    const baseTranslate = -index * slideWidthPercent;
+                    const resistance = Math.min(1, Math.max(0, 1 - Math.abs(deltaX) / (viewport.offsetWidth * 0.3)));
+                    const dampedPercent = percent * resistance;
+                    
+                    track.style.transform = `translateX(${baseTranslate + dampedPercent}%)`;
+                });
                 
                 // 수평 스와이프 시 기본 동작 방지
                 e.preventDefault();
@@ -255,6 +293,12 @@ function initBannerSlider() {
             if (!pointerDown) return;
             pointerDown = false;
             track.style.transition = '';
+            
+            // 애니메이션 프레임 정리
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
             
             // 스크롤 중이었다면 슬라이더 동작하지 않음
             if (isScrolling) {
@@ -284,6 +328,46 @@ function initBannerSlider() {
         viewport.addEventListener('pointerup', endPointer);
         viewport.addEventListener('pointercancel', endPointer);
         viewport.addEventListener('pointerleave', endPointer);
+
+        // 터치 이벤트 추가 (모바일 호환성 향상)
+        viewport.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                const touch = e.touches[0];
+                const pointerEvent = new PointerEvent('pointerdown', {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY,
+                    pointerId: touch.identifier,
+                    pointerType: 'touch'
+                });
+                viewport.dispatchEvent(pointerEvent);
+            }
+        }, { passive: false });
+
+        viewport.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1) {
+                const touch = e.touches[0];
+                const pointerEvent = new PointerEvent('pointermove', {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY,
+                    pointerId: touch.identifier,
+                    pointerType: 'touch'
+                });
+                viewport.dispatchEvent(pointerEvent);
+            }
+        }, { passive: false });
+
+        viewport.addEventListener('touchend', (e) => {
+            if (e.changedTouches.length === 1) {
+                const touch = e.changedTouches[0];
+                const pointerEvent = new PointerEvent('pointerup', {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY,
+                    pointerId: touch.identifier,
+                    pointerType: 'touch'
+                });
+                viewport.dispatchEvent(pointerEvent);
+            }
+        }, { passive: false });
 
         // autoplay control
         function startAutoplay() {
@@ -326,10 +410,15 @@ function initBannerSlider() {
                 const newSpv = computeSlidesPerView();
                 if (newSpv !== slidesPerView) {
                     // rebuild whole structure
-                    originalSlides = Array.from(track.querySelectorAll('.carousel__slide')).filter(s => !s.dataset.clone);
-                    // reset initialSlidesHTML based on current originals
-                    // But we preserved initialSlidesHTML earlier; use that for consistent content
-                    rebuild();
+                    const currentSlides = Array.from(track.querySelectorAll('.carousel__slide')).filter(s => !s.dataset.clone);
+                    if (currentSlides.length > 0) {
+                        originalSlides = currentSlides;
+                        originalCount = originalSlides.length;
+                        // initialSlidesHTML 업데이트
+                        initialSlidesHTML.length = 0;
+                        initialSlidesHTML.push(...originalSlides.map(s => s.outerHTML));
+                        rebuild();
+                    }
                 } else {
                     // nothing
                 }

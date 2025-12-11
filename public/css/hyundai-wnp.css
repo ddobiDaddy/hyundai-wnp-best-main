@@ -567,6 +567,7 @@ h2.text-center {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   border: 1px solid #e2e8f0;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .operation-item:hover {
@@ -733,6 +734,7 @@ h2.text-center {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .date-group {
@@ -1125,6 +1127,7 @@ h2.text-center {
   .filter-group, .search-group {
     flex-direction: column;
     align-items: stretch;
+
   }
   
   .search-input {
@@ -2003,6 +2006,7 @@ section {
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
 .service-item:hover {

@@ -92,7 +92,7 @@ export async function runOutboxOnce(limit = 20) {
       limit
     });
 
-    console.log(`[OutboxWorker] 처리할 알림 ${pendings.length}개 발견`);
+    // console.log(`[OutboxWorker] 처리할 알림 ${pendings.length}개 발견`);
 
     // 2) 각 알림 처리
     for (const row of pendings) {
