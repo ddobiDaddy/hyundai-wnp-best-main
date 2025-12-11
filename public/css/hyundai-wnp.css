@@ -1634,6 +1634,20 @@ h2.text-center {
   left: 0;
 }
 
+.banner-slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.banner-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
 .banner-overlay {
   position: absolute;
   top: 0;
@@ -2592,6 +2606,11 @@ section {
     max-width: 100%;
   }
 
+  .banner-slide img {
+    object-position: center center;
+    object-fit: cover;
+  }
+
   .swiper-slide {
     width: 100% !important;
   }
@@ -2862,6 +2881,15 @@ section {
     max-height: 700px;
     width: 100%;
     max-width: 100%;
+  }
+
+  .banner-slide img {
+    object-position: center center;
+    object-fit: cover;
+  }
+
+  .banner-content {
+    padding-top: 60px;
   }
 
   .banner-content h1 {

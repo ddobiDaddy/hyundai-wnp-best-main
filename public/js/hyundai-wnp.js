@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // 핵심 기능 초기화 - 안전한 초기화
-        initBannerSlider();
+        // initBannerSlider(); // 슬라이더 기능 제거
         initMobileMenu();
         initScrollAnimations();
         initSmoothScroll();

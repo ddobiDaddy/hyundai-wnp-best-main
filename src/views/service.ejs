@@ -1,11 +1,55 @@
 <%- include('partials/header', {title}) %>
 
+<link rel="stylesheet" href="/css/cycle-process.css" />
+
 <!-- 서비스 안내 히어로 섹션 -->
 <section class="hero-section">
   <div class="container">
     <div class="hero-content">
       <h1>서비스 안내</h1>
       <p>헬스/사우나 전문세탁 서비스로 좋은 세제사용과 고객 약속을 최우선으로 생각합니다</p>
+    </div>
+  </div>
+</section>
+
+<!-- 서비스 프로세스 -->
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="text-center">세탁 프로세스</h2>
+    <div class="cycle-container">
+      
+      <svg class="cycle-bg" viewBox="0 0 500 500">
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#a29bfe;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#6c5ce7;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <circle cx="250" cy="250" r="180" fill="none" stroke="#dfe6e9" stroke-width="2" stroke-dasharray="10 10" />
+        <circle cx="250" cy="250" r="180" fill="none" stroke="url(#grad1)" stroke-width="4" stroke-linecap="round" stroke-dasharray="280 1000" transform="rotate(-90 250 250)" />
+      </svg>
+
+      <div class="center-core">
+        <strong>Daily<br>Laundry</strong>
+        <span>매일 새것처럼</span>
+      </div>
+
+      <div class="step-card step-1">
+        <div class="icon-box">🚚</div>
+        <div class="step-title">세탁물 수거</div>
+      </div>
+
+      <div class="step-card step-2">
+        <div class="icon-box">✨</div>
+        <div class="step-title">항균 세탁</div>
+      </div>
+
+      <div class="step-card step-3">
+        <div class="icon-box">🚀</div>
+        <div class="step-title">신속 배달</div>
+        <!-- <div class="step-desc">신속한 배달로 고객의 편의를 위해 노력합니다</div> -->
+      </div>
+
     </div>
   </div>
 </section>
@@ -72,29 +116,6 @@
         <h3>빠른 처리</h3>
         <p>대량의 세탁물도 빠른 시간 내에 처리하여 고객의 일정에 맞춰 배송합니다.</p>
         <div class="feature-highlight">당일 처리 가능</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 서비스 프로세스 -->
-<section class="section section-alt">
-  <div class="container">
-    <h2 class="text-center">세탁 프로세스</h2>
-    <div class="simple-process">
-      <div class="process-step">
-        <div class="process-icon">🚚</div>
-        <div class="process-text">수거</div>
-      </div>
-      <div class="process-arrow">→</div>
-      <div class="process-step">
-        <div class="process-icon">🧼</div>
-        <div class="process-text">세탁</div>
-      </div>
-      <div class="process-arrow">→</div>
-      <div class="process-step">
-        <div class="process-icon">📦</div>
-        <div class="process-text">배달</div>
       </div>
     </div>
   </div>

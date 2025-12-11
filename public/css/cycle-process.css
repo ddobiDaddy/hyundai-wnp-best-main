@@ -1,0 +1,172 @@
+.cycle-container {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 60px auto;
+}
+
+/* 배경 순환 라인 (SVG) */
+.cycle-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  animation: spin 60s linear infinite; /* 천천히 회전하는 효과 */
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 중앙 텍스트/로고 */
+.center-core {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+  z-index: 1;
+  text-align: center;
+}
+  
+.center-core strong {
+  color: #6c5ce7;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+.center-core span {
+  font-size: 0.8rem;
+  color: #636e72;
+  margin-top: 4px;
+}
+
+/* 개별 단계 카드 공통 스타일 */
+.step-card {
+  position: absolute;
+  width: 160px;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.step-card:hover {
+  transform: scale(1.05);
+}
+
+/* 아이콘 스타일 */
+.icon-box {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 15px;
+  font-size: 28px;
+  color: white;
+  box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+}
+
+.step-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d3436;
+  margin-bottom: 5px;
+}
+
+.step-desc {
+  font-size: 0.85rem;
+  color: #636e72;
+  line-height: 1.4;
+}
+
+/* 위치 지정 (원형 배치) */
+/* 1. 수거 (상단 중앙) */
+.step-1 {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 20px;
+}
+.step-1:hover { transform: translateX(-50%) scale(1.05); }
+
+/* 2. 세탁 (우측 하단) */
+.step-2 {
+  bottom: 50px;
+  right: 0;
+}
+
+/* 3. 배달 (좌측 하단) */
+.step-3 {
+  bottom: 50px;
+  left: 0;
+}
+
+/* 반응형: 모바일에서는 축소된 회전 UI 제공 */
+@media (max-width: 600px) {
+  .cycle-container {
+    width: 320px;
+    height: 320px;
+    margin: 40px auto;
+  }
+
+  /* 중앙 코어 축소 */
+  .center-core {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .center-core strong {
+    font-size: 0.9rem;
+  }
+  .center-core span {
+    font-size: 0.7rem;
+  }
+
+  /* 카드 크기 축소 */
+  .step-card {
+    width: 120px;
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  /* 아이콘 크기 축소 */
+  .icon-box {
+    width: 45px;
+    height: 45px;
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  .step-title {
+    font-size: 0.95rem;
+  }
+
+  /* 위치 조정 (작은 원에 맞게) */
+  .step-1 {
+    margin-top: 10px;
+  }
+
+  .step-2 {
+    bottom: 30px;
+    right: 0;
+  }
+
+  .step-3 {
+    bottom: 30px;
+    left: 0;
+  }
+}
+

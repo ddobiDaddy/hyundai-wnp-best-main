@@ -1,49 +1,23 @@
 <%- include('partials/header', {title}) %>
 
-<!-- 메인 배너 섹션 - 무한회전 슬라이더 -->
+<!-- 메인 배너 섹션 -->
 <section class="main-banner">
-  <div class="carousel" id="carousel" aria-roledescription="carousel">
-    <button class="carousel__btn carousel__btn--prev" aria-label="Previous slide">&larr;</button>
-
+  <div class="carousel" id="carousel">
     <div class="carousel__viewport" id="viewport">
-      <ul class="carousel__track" id="track">
-        <li class="carousel__slide">
-          <img src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=1920&h=1080&fit=crop&q=80&auto=format" alt="전문 세탁 서비스" />
-          <div class="banner-overlay"></div>
-          <div class="banner-content">
-            <h1>전문 세탁 서비스</h1>
-            <p>헬스/사우나 전문세탁으로 완벽한 청결함을 제공합니다</p>
-            <div class="banner-buttons">
-              <a href="/estimate" class="btn btn-primary">견적 문의</a>
-              <a href="/service" class="btn btn-secondary">서비스 보기</a>
-            </div>
+      <div class="banner-slide">
+        <img src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=1920&h=1080&fit=crop&q=80&auto=format" alt="전문 세탁 서비스" />
+        <div class="banner-content">
+          <h1>전문 세탁 서비스</h1>
+          <p>헬스/사우나 전문세탁으로 완벽한 청결함을 제공합니다</p>
+          <div class="banner-buttons">
+            <a href="/estimate" class="btn btn-primary">견적 문의</a>
+            <a href="/service" class="btn btn-secondary">서비스 보기</a>
           </div>
-        </li>
-
-        <li class="carousel__slide">
-          <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&h=1080&fit=crop&q=80&auto=format" alt="전문 크리닝 서비스" />
-          <div class="banner-overlay"></div>
-          <div class="banner-content">
-            <h1>전문 크리닝 서비스</h1>
-            <p>염분제거, 냄새제거 등 특수 크리닝으로 완벽한 세탁</p>
-            <div class="banner-buttons">
-              <a href="/estimate" class="btn btn-primary">견적 문의</a>
-              <a href="/service" class="btn btn-secondary">서비스 보기</a>
-            </div>
-          </div>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
-
-    <button class="carousel__btn carousel__btn--next" aria-label="Next slide">&rarr;</button>
-
-    <div class="carousel__dots" id="dots" role="tablist" aria-label="Slide navigation"></div>
   </div>
 </section>
-
-
-
-
 
 <!-- 견적 문의 섹션 -->
 <section class="section">
