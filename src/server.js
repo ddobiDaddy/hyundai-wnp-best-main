@@ -89,9 +89,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Body parsers
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// Body parsers - 파일 업로드를 위해 크기 제한 증가
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.json({ limit: '50mb' }));
 
 // Static assets - 최적화된 캐싱 전략
 app.use(express.static(path.join(__dirname, "../public"), {
