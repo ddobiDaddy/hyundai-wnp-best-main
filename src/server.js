@@ -208,6 +208,10 @@ app.use((req, res, next) => {
   // 세션 정보를 템플릿에 전달
   res.locals.isAuthenticated = req.session && req.session.isAuthenticated;
   res.locals.username = req.session && req.session.username;
+  // baseUrl 설정 (Open Graph 이미지 등에 사용)
+  const protocol = req.protocol || 'http';
+  const host = req.get('host') || `${process.env.HOST || 'localhost'}:${process.env.PORT || 3000}`;
+  res.locals.baseUrl = process.env.BASE_URL || `${protocol}://${host}`;
   next();
 });
 

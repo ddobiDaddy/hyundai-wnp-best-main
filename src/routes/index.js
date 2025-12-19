@@ -27,17 +27,29 @@ const requireAuth = (req, res, next) => {
 };
 
 // 관리자 자격증명 (환경변수에서 해시된 값만 읽어옴)
-const ADMIN_USERNAME_HASH = process.env.ADMIN_USERNAME_HASH;
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH;
+// 따옴표 제거 (dotenv가 자동으로 제거하지만, 안전을 위해 명시적으로 처리)
+const ADMIN_USERNAME_HASH = process.env.ADMIN_USERNAME_HASH?.replace(/^["']|["']$/g, '') || null;
+const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH?.replace(/^["']|["']$/g, '') || null;
 
 // 환경변수 검증 및 디버깅
 if (!ADMIN_USERNAME_HASH || !ADMIN_PASSWORD_HASH) {
   logger.warn('⚠️  경고: ADMIN_USERNAME_HASH 또는 ADMIN_PASSWORD_HASH가 설정되지 않았습니다.');
   logger.warn('⚠️  .env 파일에 관리자 계정 정보를 설정해주세요.');
-  logger.warn('디버깅 - ADMIN_USERNAME_HASH:', ADMIN_USERNAME_HASH ? '설정됨' : '없음');
-  logger.warn('디버깅 - ADMIN_PASSWORD_HASH:', ADMIN_PASSWORD_HASH ? '설정됨' : '없음');
+  logger.warn('디버깅 - ADMIN_USERNAME_HASH:', ADMIN_USERNAME_HASH ? `설정됨 (길이: ${ADMIN_USERNAME_HASH.length})` : '없음');
+  logger.warn('디버깅 - ADMIN_PASSWORD_HASH:', ADMIN_PASSWORD_HASH ? `설정됨 (길이: ${ADMIN_PASSWORD_HASH.length})` : '없음');
+  logger.warn('디버깅 - NODE_ENV:', process.env.NODE_ENV);
+  logger.warn('디버깅 - .env 파일 경로:', process.cwd() + '/.env');
 } else {
-  logger.info('✅ 관리자 계정 환경변수가 정상적으로 로드되었습니다.');
+  // 해시 형식 검증 (bcrypt 해시는 보통 60자)
+  const isValidHash = (hash) => hash && hash.startsWith('$2b$') && hash.length >= 59;
+  if (!isValidHash(ADMIN_USERNAME_HASH) || !isValidHash(ADMIN_PASSWORD_HASH)) {
+    logger.error('⚠️  오류: 해시 형식이 올바르지 않습니다. bcrypt 해시는 $2b$로 시작하고 최소 59자여야 합니다.');
+    logger.error(`ADMIN_USERNAME_HASH 형식: ${isValidHash(ADMIN_USERNAME_HASH) ? '올바름' : '잘못됨'}`);
+    logger.error(`ADMIN_PASSWORD_HASH 형식: ${isValidHash(ADMIN_PASSWORD_HASH) ? '올바름' : '잘못됨'}`);
+  } else {
+    logger.info('✅ 관리자 계정 환경변수가 정상적으로 로드되었습니다.');
+    logger.info(`해시 길이 - 아이디: ${ADMIN_USERNAME_HASH.length}, 비밀번호: ${ADMIN_PASSWORD_HASH.length}`);
+  }
 }
 
 // 업로드 디렉토리 생성
@@ -138,21 +150,37 @@ router.post("/admin/login", async (req, res) => {
 
     // 환경변수 검증
     if (!ADMIN_USERNAME_HASH || !ADMIN_PASSWORD_HASH) {
-      console.error('관리자 계정이 설정되지 않았습니다.');
+      logger.error('관리자 계정이 설정되지 않았습니다.');
       return res.redirect('/admin/login?error=서버 설정 오류가 발생했습니다.');
     }
 
     // 아이디 확인 (해시 비교)
-    const isUsernameValid = await bcrypt.compare(username, ADMIN_USERNAME_HASH);
-    if (!isUsernameValid) {
-      return res.redirect('/admin/login?error=아이디 또는 비밀번호가 올바르지 않습니다.');
+    try {
+      const isUsernameValid = await bcrypt.compare(username, ADMIN_USERNAME_HASH);
+      if (!isUsernameValid) {
+        logger.warn(`로그인 실패 - 아이디 불일치: 입력된 아이디="${username}", 해시 길이=${ADMIN_USERNAME_HASH?.length || 0}`);
+        return res.redirect('/admin/login?error=아이디 또는 비밀번호가 올바르지 않습니다.');
+      }
+      logger.info(`아이디 검증 성공: ${username}`);
+    } catch (error) {
+      logger.error(`아이디 해시 비교 오류: ${error.message}`);
+      return res.redirect('/admin/login?error=로그인 중 오류가 발생했습니다.');
     }
 
     // 비밀번호 확인 (해시 비교)
-    const isPasswordValid = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
-    if (!isPasswordValid) {
-      return res.redirect('/admin/login?error=아이디 또는 비밀번호가 올바르지 않습니다.');
+    try {
+      const isPasswordValid = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
+      if (!isPasswordValid) {
+        logger.warn(`로그인 실패 - 비밀번호 불일치: 아이디=${username}, 해시 길이=${ADMIN_PASSWORD_HASH?.length || 0}`);
+        return res.redirect('/admin/login?error=아이디 또는 비밀번호가 올바르지 않습니다.');
+      }
+      logger.info(`비밀번호 검증 성공: 아이디=${username}`);
+    } catch (error) {
+      logger.error(`비밀번호 해시 비교 오류: ${error.message}`);
+      return res.redirect('/admin/login?error=로그인 중 오류가 발생했습니다.');
     }
+
+    logger.info(`로그인 성공: ${username}`);
 
     // 세션에 인증 정보 저장
     req.session.isAuthenticated = true;
