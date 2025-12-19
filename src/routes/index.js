@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 //import dotenv from "dotenv";
 import { Estimate, EstimateOutbox, GalleryImage } from "../models/index.js";
 import { sequelize, testConnection } from "../config/database.js";
+import logger from "../utils/logger.js";
 
 // dotenv 설정 (이 파일이 먼저 로드될 수 있으므로)
 // dotenv.config();
@@ -31,12 +32,12 @@ const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH;
 
 // 환경변수 검증 및 디버깅
 if (!ADMIN_USERNAME_HASH || !ADMIN_PASSWORD_HASH) {
-  console.warn('⚠️  경고: ADMIN_USERNAME_HASH 또는 ADMIN_PASSWORD_HASH가 설정되지 않았습니다.');
-  console.warn('⚠️  .env 파일에 관리자 계정 정보를 설정해주세요.');
-  console.warn('디버깅 - ADMIN_USERNAME_HASH:', ADMIN_USERNAME_HASH ? '설정됨' : '없음');
-  console.warn('디버깅 - ADMIN_PASSWORD_HASH:', ADMIN_PASSWORD_HASH ? '설정됨' : '없음');
+  logger.warn('⚠️  경고: ADMIN_USERNAME_HASH 또는 ADMIN_PASSWORD_HASH가 설정되지 않았습니다.');
+  logger.warn('⚠️  .env 파일에 관리자 계정 정보를 설정해주세요.');
+  logger.warn('디버깅 - ADMIN_USERNAME_HASH:', ADMIN_USERNAME_HASH ? '설정됨' : '없음');
+  logger.warn('디버깅 - ADMIN_PASSWORD_HASH:', ADMIN_PASSWORD_HASH ? '설정됨' : '없음');
 } else {
-  console.log('✅ 관리자 계정 환경변수가 정상적으로 로드되었습니다.');
+  logger.info('✅ 관리자 계정 환경변수가 정상적으로 로드되었습니다.');
 }
 
 // 업로드 디렉토리 생성

@@ -9,8 +9,14 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import indexRouter from "./routes/index.js";
 import { runOutboxOnce, retryFailedNotifications } from "./workers/outboxWorker.js";
+import { overrideConsole } from "./utils/logger.js";
 
 dotenv.config();
+
+// 운영 환경에서 console을 파일로도 저장하도록 오버라이드
+if (process.env.NODE_ENV === 'production') {
+  overrideConsole();
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -74,7 +80,60 @@ const cspConfig = {
 
 app.use(helmet(cspConfig));
 app.use(compression());
-app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
+
+// 한국 시간(KST, UTC+9) 가져오기
+const getKoreaTime = () => {
+  const now = new Date();
+  const koreaTime = new Date(now.getTime() + (9 * 60 * 60 * 1000)); // UTC+9
+  return koreaTime;
+};
+
+// 한국 시간으로 날짜 문자열 반환 (YYYY-MM-DD)
+const getKoreaDateString = () => {
+  const koreaTime = getKoreaTime();
+  const year = koreaTime.getUTCFullYear();
+  const month = String(koreaTime.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(koreaTime.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+// 한국 시간으로 타임스탬프 문자열 반환 (ISO 형식)
+const getKoreaTimestamp = () => {
+  const koreaTime = getKoreaTime();
+  const year = koreaTime.getUTCFullYear();
+  const month = String(koreaTime.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(koreaTime.getUTCDate()).padStart(2, '0');
+  const hours = String(koreaTime.getUTCHours()).padStart(2, '0');
+  const minutes = String(koreaTime.getUTCMinutes()).padStart(2, '0');
+  const seconds = String(koreaTime.getUTCSeconds()).padStart(2, '0');
+  const milliseconds = String(koreaTime.getUTCMilliseconds()).padStart(3, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}+09:00`;
+};
+
+// Morgan 로그 설정 (모든 로그를 app 로그 파일에 저장)
+const morganFormat = process.env.NODE_ENV === "production" ? "combined" : "dev";
+if (process.env.NODE_ENV === "production") {
+  // 운영 환경: app 로그 파일에 저장
+  const logDir = path.join(process.cwd(), 'logs');
+  if (!fs.existsSync(logDir)) {
+    fs.mkdirSync(logDir, { recursive: true });
+  }
+  const date = getKoreaDateString(); // 한국 시간 기준 날짜
+  const appLogStream = fs.createWriteStream(
+    path.join(logDir, `app-${date}.log`),
+    { flags: 'a' }
+  );
+  // HTTP 접근 로그도 app 로그 파일에 저장
+  app.use(morgan(morganFormat, { 
+    stream: {
+      write: (message) => {
+        appLogStream.write(`[${getKoreaTimestamp()}] [HTTP] ${message}`);
+      }
+    }
+  }));
+} else {
+  app.use(morgan(morganFormat));
+}
 
 // HTTP 강제 미들웨어 (HTTPS 리다이렉트 방지)
 app.use((req, res, next) => {

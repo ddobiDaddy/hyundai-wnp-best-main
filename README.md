@@ -156,7 +156,24 @@ npm run dev
 
 # 프로덕션 서버 실행
 npm start
+
+# 프로덕션 서버 실행 (백그라운드, 로그 파일 저장)
+npm run start:bg
+
+# 로그 확인
+npm run logs
 ```
+
+## 📝 로그 파일
+
+운영 환경에서 모든 로그는 단일 파일에 저장됩니다:
+
+- **전체 애플리케이션 로그**: `logs/app-YYYY-MM-DD.log`
+  - 모든 애플리케이션 로그 (info, warn, error, log)
+  - HTTP 접근 로그
+  - 모든 레벨의 로그가 하나의 파일에 저장됨
+
+로그는 날짜별로 자동 분리되어 저장되며, 운영 환경(`NODE_ENV=production`)에서만 파일로 저장됩니다.
 
 ## 🚀 배포
 

@@ -46,6 +46,11 @@ jspm_packages/
 # dotenv environment variables file
 .env
 
+# Log files
+logs/
+*.log
+app.log
+
 # next.js build output
 .next
 
