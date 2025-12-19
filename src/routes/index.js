@@ -3,12 +3,12 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import bcrypt from "bcrypt";
-import dotenv from "dotenv";
+//import dotenv from "dotenv";
 import { Estimate, EstimateOutbox, GalleryImage } from "../models/index.js";
 import { sequelize, testConnection } from "../config/database.js";
 
 // dotenv 설정 (이 파일이 먼저 로드될 수 있으므로)
-dotenv.config();
+// dotenv.config();
 
 const router = express.Router();
 
