@@ -32,11 +32,12 @@
   <meta property="twitter:description" content="현대WNP - 대한민국 NO.1 세탁전문기업" />
   <meta property="twitter:image" content="<%= logoUrl %>" />
   
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
-  <link rel="manifest" href="/site.webmanifest" />
+  <!-- Favicon (버전 쿼리로 캐시 무효화) -->
+  <% const faviconVersion = typeof version !== 'undefined' ? version : new Date().toISOString().slice(0,10).replace(/-/g,''); %>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=<%= faviconVersion %>" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=<%= faviconVersion %>" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png?v=<%= faviconVersion %>" />
+  <link rel="manifest" href="/site.webmanifest?v=<%= faviconVersion %>" />
   
   <!-- Performance optimizations -->
   <link rel="preconnect" href="//fonts.googleapis.com">

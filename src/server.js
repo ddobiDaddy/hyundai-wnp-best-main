@@ -182,6 +182,16 @@ app.use(express.static(path.join(__dirname, "../public"), {
       if (path.endsWith('.css') || path.endsWith('.js')) {
         res.setHeader('Cache-Control', 'public, max-age=300'); // 5분
       }
+      // Favicon 파일 - 버전 파라미터가 있으면 짧은 캐시, 없으면 중간 캐시
+      else if (path.match(/favicon\.(ico|svg|png)$/)) {
+        if (path.includes('?v=')) {
+          // 버전 파라미터가 있으면 짧은 캐시 (1일)
+          res.setHeader('Cache-Control', 'public, max-age=86400');
+        } else {
+          // 버전 파라미터가 없으면 중간 캐시 (7일)
+          res.setHeader('Cache-Control', 'public, max-age=604800');
+        }
+      }
       // 이미지는 중간 캐시 설정
       else if (path.match(/\.(jpg|jpeg|png|gif|webp|svg)$/)) {
         res.setHeader('Cache-Control', 'public, max-age=2592000'); // 30일
