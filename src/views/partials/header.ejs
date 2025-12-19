@@ -48,6 +48,15 @@
         <a href="/facility">시설현황</a>
         <a href="/estimate">세탁견적</a>
         <a href="/contact">고객센터</a>
+        <% if (typeof isAuthenticated !== 'undefined' && isAuthenticated) { %>
+          <div class="admin-menu">
+            <a href="/admin" class="admin-link">대시보드</a>
+            <a href="/admin/gallery" class="admin-link">갤러리 관리</a>
+            <form method="POST" action="/admin/logout" class="logout-form">
+              <button type="submit" class="btn-logout">로그아웃</button>
+            </form>
+          </div>
+        <% } %>
       </nav>
       <button class="nav-toggle" aria-label="메뉴 열기">☰</button>
     </div>

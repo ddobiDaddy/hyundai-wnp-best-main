@@ -4,6 +4,7 @@ import helmet from "helmet";
 import compression from "compression";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import session from "express-session";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import indexRouter from "./routes/index.js";
@@ -89,6 +90,18 @@ app.use((req, res, next) => {
   next();
 });
 
+// Session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'hyundai-wnp-secret-key-change-in-production',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // HTTP 환경에서는 false, HTTPS에서는 true
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24시간
+  }
+}));
+
 // Body parsers - 파일 업로드를 위해 크기 제한 증가
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.json({ limit: '50mb' }));
@@ -133,6 +146,9 @@ app.set("view engine", "ejs");
 // 정적 파일 버전을 모든 뷰에 전달하는 미들웨어
 app.use((req, res, next) => {
   res.locals.version = getStaticVersion();
+  // 세션 정보를 템플릿에 전달
+  res.locals.isAuthenticated = req.session && req.session.isAuthenticated;
+  res.locals.username = req.session && req.session.username;
   next();
 });
 

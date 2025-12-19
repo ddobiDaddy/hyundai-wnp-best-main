@@ -2,13 +2,41 @@ import express from "express";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import bcrypt from "bcrypt";
+import dotenv from "dotenv";
 import { Estimate, EstimateOutbox, GalleryImage } from "../models/index.js";
 import { sequelize, testConnection } from "../config/database.js";
+
+// dotenv 설정 (이 파일이 먼저 로드될 수 있으므로)
+dotenv.config();
 
 const router = express.Router();
 
 // DB 연결 테스트
 testConnection();
+
+// 관리자 인증 미들웨어
+const requireAuth = (req, res, next) => {
+  if (req.session && req.session.isAuthenticated) {
+    return next();
+  }
+  // 로그인 페이지로 리다이렉트
+  return res.redirect('/admin/login');
+};
+
+// 관리자 자격증명 (환경변수에서 해시된 값만 읽어옴)
+const ADMIN_USERNAME_HASH = process.env.ADMIN_USERNAME_HASH;
+const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH;
+
+// 환경변수 검증 및 디버깅
+if (!ADMIN_USERNAME_HASH || !ADMIN_PASSWORD_HASH) {
+  console.warn('⚠️  경고: ADMIN_USERNAME_HASH 또는 ADMIN_PASSWORD_HASH가 설정되지 않았습니다.');
+  console.warn('⚠️  .env 파일에 관리자 계정 정보를 설정해주세요.');
+  console.warn('디버깅 - ADMIN_USERNAME_HASH:', ADMIN_USERNAME_HASH ? '설정됨' : '없음');
+  console.warn('디버깅 - ADMIN_PASSWORD_HASH:', ADMIN_PASSWORD_HASH ? '설정됨' : '없음');
+} else {
+  console.log('✅ 관리자 계정 환경변수가 정상적으로 로드되었습니다.');
+}
 
 // 업로드 디렉토리 생성
 const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'gallery');
@@ -85,13 +113,75 @@ router.get("/contact", (req, res) => {
   res.render("contact", { title: "고객센터 - 현대W&P" });
 });
 
+// 로그인 페이지
+router.get("/admin/login", (req, res) => {
+  // 이미 로그인된 경우 관리자 페이지로 리다이렉트
+  if (req.session && req.session.isAuthenticated) {
+    return res.redirect('/admin');
+  }
+  res.render("admin-login", { 
+    title: "관리자 로그인 - 현대W&P",
+    error: req.query.error || null
+  });
+});
+
+// 로그인 처리
+router.post("/admin/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.redirect('/admin/login?error=아이디와 비밀번호를 입력해주세요.');
+    }
+
+    // 환경변수 검증
+    if (!ADMIN_USERNAME_HASH || !ADMIN_PASSWORD_HASH) {
+      console.error('관리자 계정이 설정되지 않았습니다.');
+      return res.redirect('/admin/login?error=서버 설정 오류가 발생했습니다.');
+    }
+
+    // 아이디 확인 (해시 비교)
+    const isUsernameValid = await bcrypt.compare(username, ADMIN_USERNAME_HASH);
+    if (!isUsernameValid) {
+      return res.redirect('/admin/login?error=아이디 또는 비밀번호가 올바르지 않습니다.');
+    }
+
+    // 비밀번호 확인 (해시 비교)
+    const isPasswordValid = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
+    if (!isPasswordValid) {
+      return res.redirect('/admin/login?error=아이디 또는 비밀번호가 올바르지 않습니다.');
+    }
+
+    // 세션에 인증 정보 저장
+    req.session.isAuthenticated = true;
+    req.session.username = username;
+    req.session.loginTime = new Date();
+
+    // 관리자 페이지로 리다이렉트
+    res.redirect('/admin');
+  } catch (error) {
+    console.error('로그인 오류:', error);
+    res.redirect('/admin/login?error=로그인 중 오류가 발생했습니다.');
+  }
+});
+
+// 로그아웃
+router.post("/admin/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('세션 삭제 오류:', err);
+    }
+    res.redirect('/admin/login');
+  });
+});
+
 // 갤러리 관리 페이지 (HTML 렌더링)
-router.get("/admin/gallery", (req, res) => {
+router.get("/admin/gallery", requireAuth, (req, res) => {
   res.render("gallery-admin", { title: "갤러리 관리 - 현대W&P" });
 });
 
 // 관리자 페이지 라우트
-router.get("/admin", async (req, res) => {
+router.get("/admin", requireAuth, async (req, res) => {
   try {
     // 모든 견적 문의 조회 (최신순)
     const estimates = await Estimate.findAll({
@@ -256,7 +346,7 @@ router.post("/estimate", async (req, res) => {
 });
 
 // 견적 문의 상태 업데이트 API
-router.put("/admin/estimate/:id/status", async (req, res) => {
+router.put("/admin/estimate/:id/status", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const { status, adminNotes } = req.body;
@@ -302,7 +392,7 @@ router.put("/admin/estimate/:id/status", async (req, res) => {
 });
 
 // 견적 문의 상세 조회 API
-router.get("/admin/estimate/:id", async (req, res) => {
+router.get("/admin/estimate/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -330,7 +420,7 @@ router.get("/admin/estimate/:id", async (req, res) => {
 });
 
 // 텔레그램 알림 재시도 API
-router.post("/admin/notifications/retry", async (req, res) => {
+router.post("/admin/notifications/retry", requireAuth, async (req, res) => {
   try {
     const { runOutboxOnce, retryFailedNotifications } = await import('../workers/outboxWorker.js');
     
@@ -355,7 +445,7 @@ router.post("/admin/notifications/retry", async (req, res) => {
 });
 
 // 갤러리 이미지 업로드 API
-router.post("/admin/gallery/upload", upload.array('images', 10), async (req, res) => {
+router.post("/admin/gallery/upload", requireAuth, upload.array('images', 10), async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({
@@ -417,7 +507,7 @@ router.post("/admin/gallery/upload", upload.array('images', 10), async (req, res
 });
 
 // 갤러리 이미지 목록 조회 API
-router.get("/api/admin/gallery", async (req, res) => {
+router.get("/api/admin/gallery", requireAuth, async (req, res) => {
   try {
     const { page = 1, limit = 12, category = '', search = '' } = req.query;
     const offset = (page - 1) * limit;
@@ -463,7 +553,7 @@ router.get("/api/admin/gallery", async (req, res) => {
 });
 
 // 갤러리 이미지 상세 조회 API
-router.get("/api/admin/gallery/:id", async (req, res) => {
+router.get("/api/admin/gallery/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -491,7 +581,7 @@ router.get("/api/admin/gallery/:id", async (req, res) => {
 });
 
 // 갤러리 이미지 수정 API
-router.put("/api/admin/gallery/:id", async (req, res) => {
+router.put("/api/admin/gallery/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description, category, sortOrder, isActive } = req.body;
@@ -528,7 +618,7 @@ router.put("/api/admin/gallery/:id", async (req, res) => {
 });
 
 // 갤러리 이미지 삭제 API
-router.delete("/api/admin/gallery/:id", async (req, res) => {
+router.delete("/api/admin/gallery/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     
