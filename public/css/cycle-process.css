@@ -39,7 +39,7 @@
 }
   
 .center-core strong {
-  color: #6c5ce7;
+  color: #009fff;
   font-size: 1.1rem;
   font-weight: 800;
 }
@@ -68,7 +68,7 @@
 .icon-box {
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+  background: linear-gradient(135deg, #ddf0f9, #0089ff);
   border-radius: 50%;
   display: flex;
   justify-content: center;

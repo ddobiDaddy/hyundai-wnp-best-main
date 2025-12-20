@@ -436,7 +436,7 @@ body {
 
 /* 히어로 섹션 */
 .hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #7bdaff 100%);
   color: white;
   padding: 120px 0 80px;
   position: relative;
@@ -542,7 +542,7 @@ h2.text-center {
 .card:hover {
   transform: translateY(-10px);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  border-color: #667eea;
+  border-color: #4ca3ff;
 }
 
 .card-icon {
@@ -551,7 +551,7 @@ h2.text-center {
   width: 80px;
   height: 80px;
   margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #ddf0f9, #0089ff);
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -1017,7 +1017,7 @@ h2.text-center {
 }
 
 .btn-primary {
-  background: #667eea;
+  background: #39b4ff;
   color: white;
 }
 
@@ -1385,7 +1385,7 @@ h2.text-center {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #ddf0f9, #0089ff);
   border-radius: 10px;
   color: white;
   flex-shrink: 0;
@@ -1437,7 +1437,7 @@ h2.text-center {
   content: '✓';
   position: absolute;
   left: 0;
-  color: #667eea;
+  color: #00aaff;
   font-weight: bold;
 }
 
@@ -1562,7 +1562,7 @@ h2.text-center {
 /* 강조 스타일 */
 .operation-item.highlight,
 .contact-card.highlight {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1c259f, #1ed4ff);
   color: white;
   border: none;
   transform: scale(1.05);
@@ -1587,9 +1587,9 @@ h2.text-center {
 }
 
 .highlight-text {
-  color: #667eea;
+  color: #0070d3;
   font-weight: 700;
-  background: linear-gradient(45deg, #667eea, #764ba2);
+  background: linear-gradient(174deg, #1898e3, #063b7d);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1604,12 +1604,12 @@ h2.text-center {
 }
 
 .footer-contact .contact-item.highlight span {
-  color: #667eea;
+  color: #ffffff;
   font-weight: 600;
 }
 
 .footer-contact .contact-item.highlight strong {
-  background: linear-gradient(45deg, #667eea, #764ba2);
+  background: linear-gradient(45deg, #ffffff, #ffffff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1811,18 +1811,18 @@ h2.text-center {
 }
 
 .banner-buttons .btn-primary {
-  background: linear-gradient(135deg, #ff6600, #ff8833);
+  background: linear-gradient(135deg, #1c259f, #1ed4ff);
   border: none;
   color: white;
-  box-shadow: 0 4px 15px rgba(255, 102, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 102, 204, 0.6), 0 2px 8px rgba(0, 0, 0, 0.3);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .banner-buttons .btn-primary:hover {
-  background: linear-gradient(135deg, #e55a00, #ff7722);
+  background: linear-gradient(135deg, #0052A3, #007BFF);
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(255, 102, 0, 0.7), 0 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 25px rgba(0, 102, 204, 0.7), 0 4px 12px rgba(0, 0, 0, 0.4);
   border-color: rgba(255, 255, 255, 0.4);
 }
 
@@ -2158,7 +2158,7 @@ section {
 
 .estimate-badge {
   display: inline-block;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #5dcbff, #006efb);
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
@@ -2192,7 +2192,7 @@ section {
 /* ===== 서비스 특징 하이라이트 ===== */
 .feature-highlight {
   display: inline-block;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #5dcbff, #006efb);
   color: white;
   padding: 6px 12px;
   border-radius: 15px;
@@ -2208,7 +2208,7 @@ section {
   width: 60px;
   height: 60px;
   margin: 0 auto 1rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #ddf0f9, #0089ff);
   border-radius: 15px;
   display: flex;
   align-items: center;
@@ -2219,7 +2219,7 @@ section {
 /* ===== 특수 서비스 배지 ===== */
 .service-badge {
   display: inline-block;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #ddf0f9, #0089ff);
   color: white;
   padding: 6px 12px;
   border-radius: 15px;
@@ -2305,7 +2305,7 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #ddf0f9, #0089ff);
   border-radius: 50%;
   color: white;
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
@@ -2505,7 +2505,7 @@ section {
   font-weight: bold;
   color: var(--primary-color);
   margin-bottom: 8px;
-  background: linear-gradient(45deg, #667eea, #764ba2);
+  background: linear-gradient(45deg, #ffffff, #ffffff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2571,7 +2571,7 @@ section {
   left: 0;
   width: 30px;
   height: 2px;
-  background: linear-gradient(45deg, #667eea, #764ba2);
+  background: linear-gradient(45deg, #667eea, #1d34e7);
   border-radius: 1px;
 }
 
@@ -2619,7 +2619,7 @@ section {
 }
 
 .footer-hours h5 {
-  color: var(--primary-color);
+  color: #ffffff;
   margin-bottom: 15px;
   font-size: 18px;
   font-weight: 600;
@@ -2745,7 +2745,7 @@ section {
   }
 
   .banner-buttons .btn-primary {
-    background: linear-gradient(135deg, #ff6600, #ff8833) !important;
+    background: linear-gradient(135deg, #0066CC, #1E90FF) !important;
     border: 2px solid rgba(255, 255, 255, 0.3) !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
   }
@@ -3016,7 +3016,7 @@ section {
   }
 
   .banner-buttons .btn-primary {
-    background: linear-gradient(135deg, #ff6600, #ff8833) !important;
+    background: linear-gradient(135deg, #5BA3F5, #87CEEB) !important;
     border: 2px solid rgba(255, 255, 255, 0.4) !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
   }
